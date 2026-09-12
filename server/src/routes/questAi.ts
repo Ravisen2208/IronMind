@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth, AuthenticatedRequest } from "../lib/auth";
+import { optionalAuth, AuthenticatedRequest } from "../lib/auth";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const router = Router();
@@ -12,7 +12,8 @@ const FALLBACK_SUGGESTIONS = [
   { title: "Active recovery: 20 min dynamic stretching", type: "gym", category: "Gym", priority: "low" },
 ];
 
-router.post("/", requireAuth, async (req: AuthenticatedRequest, res) => {
+router.post("/", optionalAuth, async (req: AuthenticatedRequest, res) => {
+
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey === "your_gemini_api_key") {
@@ -72,7 +73,7 @@ Return ONLY a valid JSON object matching this exact TypeScript structure without
 // ==========================================
 // 1. DSA AI Code Assistant & Hints Endpoint
 // ==========================================
-router.post("/dsa-hint", requireAuth, async (req: AuthenticatedRequest, res) => {
+router.post("/dsa-hint", optionalAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const { problemTitle, description, userCode, language, requestType } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
@@ -284,19 +285,22 @@ function getTopicFallback(topic: string, difficulty: string) {
 // ==========================================
 // 2. DSA Custom Problem Generator Endpoint
 // ==========================================
-router.post("/dsa-problem", requireAuth, async (req: AuthenticatedRequest, res) => {
+router.post("/dsa-problem", optionalAuth, async (req: AuthenticatedRequest, res) => {
   const { topic = "Dynamic Programming", difficulty = "Medium" } = req.body || {};
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (apiKey && apiKey !== "your_gemini_api_key" && apiKey.startsWith("AIzaSy")) {
-    try {
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({
-        model: "gemini-3.6-flash",
-        generationConfig: { responseMimeType: "application/json" },
-      });
+    const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.6-flash"];
+    const genAI = new GoogleGenerativeAI(apiKey);
 
-      const prompt = `Generate a complete LeetCode-style Data Structures & Algorithms problem on the topic "${topic}" with difficulty "${difficulty}".
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          generationConfig: { responseMimeType: "application/json" },
+        });
+
+        const prompt = `Generate a complete LeetCode-style Data Structures & Algorithms problem on the topic "${topic}" with difficulty "${difficulty}".
 Return ONLY a valid JSON object matching this exact TypeScript structure:
 {
   "id": "kebab-case-problem-id-${Date.now()}",
@@ -336,18 +340,19 @@ Return ONLY a valid JSON object matching this exact TypeScript structure:
   ]
 }`;
 
-      const result = await model.generateContent(prompt);
-      const responseText = result.response.text().trim();
-      const parsedProblem = JSON.parse(responseText);
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text().trim();
+        const parsedProblem = JSON.parse(responseText);
 
-      console.log("✨ [QuestAI] Gemini generated DSA problem:", parsedProblem.title);
-      return res.status(200).json({
-        success: true,
-        source: "gemini-ai",
-        problem: parsedProblem,
-      });
-    } catch (error: any) {
-      console.warn("⚠️ [QuestAI] Gemini DSA generation error, using resilient fallback:", error?.message || error);
+        console.log(`✨ [QuestAI] Gemini (${modelName}) generated DSA problem:`, parsedProblem.title);
+        return res.status(200).json({
+          success: true,
+          source: "gemini-ai",
+          problem: parsedProblem,
+        });
+      } catch (error: any) {
+        console.warn(`⚠️ [QuestAI] Gemini ${modelName} error:`, error?.message || error);
+      }
     }
   }
 
@@ -362,41 +367,107 @@ Return ONLY a valid JSON object matching this exact TypeScript structure:
 });
 
 // ==========================================
+// Comprehensive Tailored Gym Workout Generator
+// ==========================================
+function getTailoredGymRoutine(
+  goal: string,
+  muscleGroup: string,
+  equipment: string,
+  level: string,
+  durationMinutes: number
+) {
+  const normMuscle = (muscleGroup || "").toLowerCase();
+  const isStrength = goal.toLowerCase().includes("strength") || goal.toLowerCase().includes("power");
+  const isEndurance = goal.toLowerCase().includes("endurance") || goal.toLowerCase().includes("stamina");
+  const sets = isStrength ? 4 : isEndurance ? 3 : 4;
+  const reps = isStrength ? 5 : isEndurance ? 15 : 10;
+  const restSec = isStrength ? 120 : isEndurance ? 45 : 60;
+
+  type ExerciseEntry = { exercise: string; muscleGroup: string; formTip: string };
+  let exercisesList: ExerciseEntry[] = [];
+
+  if (normMuscle.includes("chest") || normMuscle.includes("push")) {
+    exercisesList = [
+      { exercise: "Barbell Flat Bench Press", muscleGroup: "Chest", formTip: "Retract scapula, keep feet planted, push through the palms." },
+      { exercise: "Incline Dumbbell Press", muscleGroup: "Upper Chest", formTip: "Control the 2-second negative stretch at 30-degree incline." },
+      { exercise: "Tricep Rope Overhead Extension", muscleGroup: "Triceps", formTip: "Keep elbows fixed high and spread rope handles at top." },
+      { exercise: "Bodyweight Dips / Pushups", muscleGroup: "Chest & Triceps", formTip: "Lean forward to emphasize lower chest fibers." },
+    ];
+  } else if (normMuscle.includes("back") || normMuscle.includes("pull")) {
+    exercisesList = [
+      { exercise: "Deadlifts or Barbell Rows", muscleGroup: "Back & Posterior Chain", formTip: "Hinge hips with a flat back and drive through heels." },
+      { exercise: "Wide-Grip Pull-Ups / Lat Pulldown", muscleGroup: "Lats", formTip: "Initiate pull by driving elbows down into back pockets." },
+      { exercise: "Seated Cable Row", muscleGroup: "Mid Back & Rhomboids", formTip: "Squeeze shoulder blades together for 1-second hold." },
+      { exercise: "Dumbbell Incline Bicep Curls", muscleGroup: "Biceps", formTip: "Keep elbows back and supinate wrists at peak contraction." },
+    ];
+  } else if (normMuscle.includes("leg") || normMuscle.includes("quad") || normMuscle.includes("glute")) {
+    exercisesList = [
+      { exercise: "Barbell Back Squats", muscleGroup: "Quadriceps & Glutes", formTip: "Hit parallel depth with knees tracking over toes." },
+      { exercise: "Romanian Deadlifts (RDL)", muscleGroup: "Hamstrings & Glutes", formTip: "Feel deep stretch along hamstrings with neutral spine." },
+      { exercise: "Bulgarian Split Squats", muscleGroup: "Quads & Glute Medius", formTip: "Maintain upright torso and push through lead heel." },
+      { exercise: "Standing Calf Raises & Plank", muscleGroup: "Calves & Core", formTip: "Full pause at the top extension of each rep." },
+    ];
+  } else if (normMuscle.includes("shoulder") || normMuscle.includes("delt")) {
+    exercisesList = [
+      { exercise: "Standing Barbell Overhead Press", muscleGroup: "Front & Side Delts", formTip: "Brace glutes and abs to prevent lower back arching." },
+      { exercise: "Dumbbell Lateral Raises", muscleGroup: "Lateral Deltoids", formTip: "Lead with elbows and avoid swinging torso momentum." },
+      { exercise: "Face Pulls with Cable Rope", muscleGroup: "Rear Delts & Rotator Cuff", formTip: "Pull high towards forehead with external shoulder rotation." },
+      { exercise: "Dumbbell Shrugs", muscleGroup: "Upper Traps", formTip: "Elevate straight up without rolling shoulders forward." },
+    ];
+  } else if (normMuscle.includes("arm") || normMuscle.includes("bicep") || normMuscle.includes("tricep")) {
+    exercisesList = [
+      { exercise: "EZ-Bar Standing Bicep Curls", muscleGroup: "Biceps", formTip: "Lock elbows at sides and avoid using hip momentum." },
+      { exercise: "Close-Grip Bench Press or Skull Crushers", muscleGroup: "Triceps", formTip: "Tuck elbows inward to isolate tricep long head." },
+      { exercise: "Incline Hammer Curls", muscleGroup: "Brachialis & Forearms", formTip: "Neutral grip with full control on eccentric descent." },
+      { exercise: "Cable Tricep Pushdowns", muscleGroup: "Triceps Lateral Head", formTip: "Flaring hands outward at bottom contraction." },
+    ];
+  } else {
+    // Full Body or All Muscle Groups
+    exercisesList = [
+      { exercise: "Barbell Back Squat", muscleGroup: "Legs & Core", formTip: "Brace diaphragm 360 degrees and hit full depth." },
+      { exercise: "Flat Barbell Bench Press", muscleGroup: "Chest & Triceps", formTip: "Retract scapulae and press in slight J-curve path." },
+      { exercise: "Bent-Over Barbell Row", muscleGroup: "Lats & Upper Back", formTip: "Torso at 45 degrees, pull bar to lower ribcage." },
+      { exercise: "Dumbbell Standing Overhead Press", muscleGroup: "Shoulders", formTip: "Full lockout overhead without lumbar hyperextension." },
+      { exercise: "Hanging Leg Raises / Plank", muscleGroup: "Core & Abs", formTip: "Tilt pelvis posterior and squeeze abs at apex." },
+    ];
+  }
+
+  const exercisePlans = exercisesList.map((ex) => ({
+    exercise: ex.exercise,
+    muscleGroup: ex.muscleGroup,
+    sets,
+    reps,
+    formTip: ex.formTip,
+    restSec,
+  }));
+
+  return {
+    workoutName: `${muscleGroup || "Full Body"} ${goal} Protocol`,
+    focus: `${goal} Routine (${level || "Intermediate"})`,
+    summary: `Tailored ${durationMinutes}-minute science-based ${goal.toLowerCase()} routine targeting ${muscleGroup || "the entire kinetic chain"}. Designed for progressive overload with ${equipment || "standard equipment"}.`,
+    exercises: exercisePlans,
+  };
+}
+
+// ==========================================
 // 3. Gym AI Workout Generator Endpoint
 // ==========================================
-router.post("/gym-workout", requireAuth, async (req: AuthenticatedRequest, res) => {
-  try {
-    const {
-      goal = "Hypertrophy",
-      muscleGroup = "Chest & Triceps",
-      level = "Intermediate",
-      equipment = "Gym Barbell & Dumbbell",
-      durationMinutes = 45,
-    } = req.body;
+router.post("/gym-workout", optionalAuth, async (req: AuthenticatedRequest, res) => {
+  const {
+    goal = "Hypertrophy",
+    muscleGroup = "Chest & Triceps",
+    level = "Intermediate",
+    equipment = "Gym Barbell & Dumbbell",
+    durationMinutes = 45,
+  } = req.body || {};
 
-    const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey || apiKey === "your_gemini_api_key") {
-      // Fallback offline routine
-      return res.status(200).json({
-        success: true,
-        source: "fallback",
-        workoutName: `${muscleGroup} Power Workout`,
-        focus: `${goal} Routine (${level})`,
-        summary: "Balanced physical training session designed to stimulate progressive overload.",
-        exercises: [
-          { exercise: "Bench Press / Pushups", muscleGroup: "Chest", sets: 4, reps: 10, formTip: "Keep shoulders retracted and core braced.", restSec: 90 },
-          { exercise: "Incline Dumbbell Press", muscleGroup: "Upper Chest", sets: 3, reps: 12, formTip: "Full range of motion with slow eccentric.", restSec: 60 },
-          { exercise: "Tricep Rope Pushdowns", muscleGroup: "Triceps", sets: 3, reps: 15, formTip: "Lock elbows at sides and flare ropes at bottom.", restSec: 45 },
-          { exercise: "Dips or Diamond Pushups", muscleGroup: "Chest & Arms", sets: 3, reps: 12, formTip: "Lean slightly forward to target lower chest.", restSec: 60 },
-        ],
-      });
-    }
-
+  if (apiKey && apiKey !== "your_gemini_api_key" && apiKey.startsWith("AIzaSy")) {
+    const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.6-flash"];
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
-    const prompt = `You are a world-class strength coach and fitness scientist. Generate an optimal, science-backed workout routine for:
+    const prompt = `You are an elite strength coach and sports scientist. Generate an optimal workout routine for:
 - Goal: ${goal}
 - Target Muscle Group: ${muscleGroup}
 - Fitness Level: ${level}
@@ -420,41 +491,44 @@ Return ONLY a valid JSON object matching this exact structure without markdown c
   ]
 }`;
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text().trim();
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text().trim();
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
 
-    if (jsonMatch) {
-      const parsedWorkout = JSON.parse(jsonMatch[0]);
-      console.log("✨ [QuestAI] Gemini generated workout:", parsedWorkout.workoutName);
-      return res.status(200).json({
-        success: true,
-        source: "gemini-ai",
-        ...parsedWorkout,
-      });
+        if (jsonMatch) {
+          const parsedWorkout = JSON.parse(jsonMatch[0]);
+          if (parsedWorkout.exercises && parsedWorkout.exercises.length > 0) {
+            console.log(`✨ [QuestAI] Gemini (${modelName}) generated workout:`, parsedWorkout.workoutName);
+            return res.status(200).json({
+              success: true,
+              source: "gemini-ai",
+              ...parsedWorkout,
+            });
+          }
+        }
+      } catch (error: any) {
+        console.warn(`⚠️ [QuestAI] Gemini ${modelName} gym error:`, error?.message || error);
+      }
     }
-
-    throw new Error("Invalid gym workout JSON payload format");
-  } catch (error: any) {
-    console.error("❌ [QuestAI] Gym AI Workout Error:", error?.message || error);
-    return res.status(200).json({
-      success: true,
-      source: "fallback",
-      workoutName: "Strength Protocol",
-      focus: "General Conditioning",
-      summary: "Standard routine provided as fallback.",
-      exercises: [
-        { exercise: "Compound Press", muscleGroup: "Upper Body", sets: 4, reps: 8, formTip: "Brace core and keep spine neutral.", restSec: 90 },
-        { exercise: "Bodyweight Dips", muscleGroup: "Triceps & Chest", sets: 3, reps: 12, formTip: "Smooth controlled tempo.", restSec: 60 },
-      ],
-    });
   }
+
+  // Resilient tailored fallback routine
+  const routine = getTailoredGymRoutine(goal, muscleGroup, equipment, level, durationMinutes);
+  console.log("ℹ️ [QuestAI] Served tailored intelligent workout routine:", routine.workoutName);
+  return res.status(200).json({
+    success: true,
+    source: "fallback",
+    ...routine,
+  });
 });
 
 // ==========================================
 // 4. Study AI Plan & Topic Directive Endpoint
 // ==========================================
-router.post("/study-plan", requireAuth, async (req: AuthenticatedRequest, res) => {
+router.post("/study-plan", optionalAuth, async (req: AuthenticatedRequest, res) => {
   const {
     subject = "Computer Science",
     topic = "Dynamic Programming",
@@ -462,28 +536,11 @@ router.post("/study-plan", requireAuth, async (req: AuthenticatedRequest, res) =
     goal = "Master Core Invariants & Patterns",
   } = req.body || {};
 
-  try {
-    const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey || apiKey === "your_gemini_api_key") {
-      return res.status(200).json({
-        success: true,
-        source: "fallback",
-        studyTitle: `Deep Focus: ${topic}`,
-        subject: subject,
-        duration: durationMinutes,
-        keyConcepts: ["Core Definitions & Invariants", "Time & Space Complexity Tradeoffs", "Hands-on Practice Problems"],
-        milestones: [
-          { step: "Theory Review (15 min)", task: `Read core notes on ${topic}` },
-          { step: "Implementation (20 min)", task: `Code 1 classic problem on ${topic}` },
-          { step: "Spaced Retrieval (10 min)", task: "Write a 3-bullet takeaway summary in IronMind" },
-        ],
-        recommendedTaskTitle: `Master ${topic} core patterns`,
-      });
-    }
-
+  if (apiKey && apiKey !== "your_gemini_api_key" && apiKey.startsWith("AIzaSy")) {
+    const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-3.6-flash"];
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
 
     const prompt = `You are an MIT/Stanford computer science professor and cognitive mastery mentor. Generate a structured deep-study directive for:
 - Subject: ${subject}
@@ -506,37 +563,51 @@ Return ONLY a valid JSON object matching this exact structure without markdown f
   "recommendedTaskTitle": "string (actionable quest title under 50 chars for IronMind quest system)"
 }`;
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text().trim();
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text().trim();
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
 
-    if (jsonMatch) {
-      const parsedPlan = JSON.parse(jsonMatch[0]);
-      console.log("✨ [QuestAI] Gemini generated study plan:", parsedPlan.studyTitle);
-      return res.status(200).json({
-        success: true,
-        source: "gemini-ai",
-        ...parsedPlan,
-      });
+        if (jsonMatch) {
+          const parsedPlan = JSON.parse(jsonMatch[0]);
+          if (parsedPlan.milestones && parsedPlan.milestones.length > 0) {
+            console.log(`✨ [QuestAI] Gemini (${modelName}) generated study plan:`, parsedPlan.studyTitle);
+            return res.status(200).json({
+              success: true,
+              source: "gemini-ai",
+              ...parsedPlan,
+            });
+          }
+        }
+      } catch (error: any) {
+        console.warn(`⚠️ [QuestAI] Gemini ${modelName} study error:`, error?.message || error);
+      }
     }
-
-    throw new Error("Invalid study plan JSON payload format");
-  } catch (error: any) {
-    console.error("❌ [QuestAI] Study AI Plan Error:", error?.message || error);
-    return res.status(200).json({
-      success: true,
-      source: "fallback",
-      studyTitle: `Deep Study: ${topic}`,
-      subject: subject,
-      duration: durationMinutes,
-      keyConcepts: ["Fundamental Principles", "Architecture & Invariants"],
-      milestones: [
-        { step: "Read & Understand", task: `Learn key concepts of ${topic}` },
-        { step: "Apply & Code", task: "Solve representative practice questions" },
-      ],
-      recommendedTaskTitle: `Master ${topic} core patterns`,
-    });
   }
+
+  // Resilient tailored study plan fallback
+  console.log(`ℹ️ [QuestAI] Served tailored study plan for ${topic}`);
+  return res.status(200).json({
+    success: true,
+    source: "fallback",
+    studyTitle: `Deep Study: ${topic}`,
+    subject: subject,
+    duration: durationMinutes,
+    keyConcepts: [
+      `${topic} Theoretical Foundations & Invariants`,
+      "Complexity Trade-offs (Time & Space)",
+      "Real-world Practical Application Patterns"
+    ],
+    milestones: [
+      { step: "Conceptual Foundation (15 min)", task: `Deep dive into core mechanics and edge cases of ${topic}` },
+      { step: "Hands-on Synthesis (20 min)", task: `Implement 1-2 representative problems and trace invariants` },
+      { step: "Active Recall (10 min)", task: "Summarize key mental models and write personal insights" },
+    ],
+    recommendedTaskTitle: `Master ${topic} core patterns`,
+  });
 });
 
 export default router;
+
