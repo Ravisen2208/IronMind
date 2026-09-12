@@ -11,6 +11,10 @@ import {
   CategoryItem,
   CompletionResponse,
   DEFAULT_CATEGORIES,
+  TaskType,
+  TaskPriority,
+  GymDetails,
+  StudyDetails,
 } from "@/types";
 
 export * from "@/types";

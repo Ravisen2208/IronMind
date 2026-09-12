@@ -98,7 +98,7 @@ export function GymTracker() {
       });
 
       if (res.success && res.data?.task) {
-        setGymTasks((prev) => [res.data.task, ...prev]);
+        setGymTasks((prev) => [res.data!.task, ...prev]);
         setIsFormOpen(false);
         showToast("Workout quest embarked!", "success");
       } else {

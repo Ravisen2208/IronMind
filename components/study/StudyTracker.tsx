@@ -92,7 +92,7 @@ export function StudyTracker() {
       });
 
       if (res.success && res.data?.task) {
-        setStudyTasks((prev) => [res.data.task, ...prev]);
+        setStudyTasks((prev) => [res.data!.task, ...prev]);
         setIsFormOpen(false);
         showToast("Study quest embarked!", "success");
       } else {

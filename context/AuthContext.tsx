@@ -18,6 +18,7 @@ export interface UserStats {
   xp: number;
   coins: number;
   streak: number;
+  longestStreak?: number;
   lastCompletedDate: string | null;
   attributes: {
     intellect: number;
