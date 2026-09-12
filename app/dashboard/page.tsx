@@ -101,7 +101,7 @@ export default function DashboardPage() {
   const todayProgressPercent = totalToday > 0 ? Math.round((completedToday / totalToday) * 100) : 0;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8">
+    <div className="w-full px-4 sm:px-8 lg:px-12 py-6 sm:py-10 space-y-8">
       {/* Top Header */}
       <FadeIn yOffset={10} duration={0.5} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>

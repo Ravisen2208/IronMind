@@ -15,7 +15,7 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
 
 export function DashboardSkeleton() {
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8 animate-pulse">
+    <div className="w-full px-4 sm:px-8 lg:px-12 py-8 space-y-8 animate-pulse">
       {/* Top Banner Skeleton */}
       <div className="h-44 rounded-3xl bg-slate-200/70 w-full" />
 

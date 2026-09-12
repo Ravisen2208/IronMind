@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function StudyPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <div className="w-full px-4 sm:px-8 lg:px-12 py-8 space-y-6">
       <FadeIn yOffset={10}>
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">

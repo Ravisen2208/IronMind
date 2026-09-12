@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { TaskItem } from "@/lib/db";
+import { TaskItem } from "@/types";
 import { apiRequest } from "@/lib/api";
 import { ProgressCharts } from "@/components/progress/ProgressCharts";
 import { FadeIn } from "@/components/animations/MotionWrapper";
@@ -32,7 +32,7 @@ export default function ProgressPage() {
   }, [user, isDemoMode]);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <div className="w-full px-4 sm:px-8 lg:px-12 py-8 space-y-6">
       <FadeIn yOffset={10}>
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">

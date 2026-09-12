@@ -44,7 +44,7 @@ export default function RootLayout({
             <main className="flex-1 pb-20 md:pb-8">{children}</main>
             <MobileBottomNav />
             <footer className="hidden md:block py-8 text-center text-xs text-text-secondary border-t border-divider/60">
-              <div className="max-w-6xl mx-auto px-4">
+              <div className="w-full px-4 sm:px-8 lg:px-12 text-center">
                 <p className="font-medium">
                   IronMind &copy; {new Date().getFullYear()} — Train your mind. Complete your quests. Become stronger.
                 </p>

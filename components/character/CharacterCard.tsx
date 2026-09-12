@@ -60,7 +60,7 @@ export function CharacterCard({ stats, isLeveledUp = false }: CharacterCardProps
         </div>
 
         {/* Level & XP Detail Block */}
-        <div className="w-full md:max-w-md">
+        <div className="w-full md:max-w-lg lg:max-w-xl xl:max-w-2xl">
           <XPProgress
             currentXp={stats.xp}
             xpRequired={xpRequired}

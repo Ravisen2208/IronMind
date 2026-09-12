@@ -13,7 +13,7 @@ export function HeroSection() {
 
   return (
     <div className="relative pt-6 pb-20 sm:pt-12 sm:pb-28 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Top Tagline Badge */}
         <FadeIn delay={0.1} yOffset={10} className="flex justify-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface/90 border border-divider/80 shadow-subtle backdrop-blur-md">
