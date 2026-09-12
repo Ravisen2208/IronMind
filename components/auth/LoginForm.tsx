@@ -42,7 +42,7 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-surface border border-divider/70 shadow-card">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-text-primary tracking-tight">
+        <h2 className="text-2xl font-serif text-text-primary tracking-tight">
           Welcome back to IronMind
         </h2>
         <p className="text-xs sm:text-sm text-text-secondary mt-1">
@@ -69,7 +69,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="warrior@ironmind.app"
-              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-slate-50/50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-warm-light/30 text-text-primary text-sm focus:bg-cream transition-all outline-none"
             />
           </div>
         </div>
@@ -86,7 +86,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-slate-50/50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-warm-light/30 text-text-primary text-sm focus:bg-cream transition-all outline-none"
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
+          className="w-full py-3.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -119,7 +119,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={handleDemoLogin}
-        className="w-full py-3 rounded-full bg-slate-100 hover:bg-slate-200/80 text-text-primary text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 border border-divider/60"
+        className="w-full py-3 rounded-full bg-warm-light hover:bg-champagne/50 text-text-primary text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 border border-divider/60"
       >
         <Sparkles className="w-3.5 h-3.5 text-accent" />
         <span>Continue with Instant Guest Demo</span>

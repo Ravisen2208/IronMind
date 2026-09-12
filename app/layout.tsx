@@ -7,7 +7,7 @@ import { MobileBottomNav } from "@/components/ui/MobileBottomNav";
 import { AnimatedBackground } from "@/components/animations/AnimatedBackground";
 
 export const viewport: Viewport = {
-  themeColor: "#F5F5F7",
+  themeColor: "#EDE8E3",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -36,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased selection:bg-accent/15 selection:text-accent">
+      <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased selection:bg-champagne/40 selection:text-text-primary">
         <AuthProvider>
           <ToastProvider>
             <AnimatedBackground />

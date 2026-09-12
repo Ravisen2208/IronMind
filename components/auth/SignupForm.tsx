@@ -125,7 +125,7 @@ export function SignupForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
+          className="w-full py-3.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 mt-2"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

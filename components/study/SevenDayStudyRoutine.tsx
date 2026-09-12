@@ -244,7 +244,7 @@ export function SevenDayStudyRoutine({
                 onClick={() => setSelectedDay(r.dayNumber)}
                 className={`py-2 px-2.5 rounded-lg text-center transition-all ${
                   isSelected
-                    ? "bg-accent text-white font-bold shadow-sm scale-102"
+                    ? "bg-accent text-cream font-bold shadow-sm scale-102"
                     : isToday
                     ? "bg-blue-100 text-accent font-bold border border-accent/30"
                     : "text-text-secondary hover:text-text-primary hover:bg-white"
@@ -318,7 +318,7 @@ export function SevenDayStudyRoutine({
 
             <button
               onClick={() => handleLaunchTodayStudy(activeRoutine)}
-              className="px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-white text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Embark on Day {activeRoutine.dayNumber} Directive</span>
@@ -509,7 +509,7 @@ export function SevenDayStudyRoutine({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-full bg-accent text-white text-xs font-semibold shadow-sm"
+                  className="flex-1 py-2.5 rounded-full bg-accent text-cream text-xs font-semibold shadow-sm"
                 >
                   Save Directive
                 </button>

@@ -70,7 +70,7 @@ export function LevelUpModal({ isOpen, newLevel, onClose }: LevelUpModalProps) {
 
             <button
               onClick={onClose}
-              className="mt-6 w-full py-3 px-6 rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold shadow-sm transition-all active:scale-95"
+              className="mt-6 w-full py-3 px-6 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold shadow-sm transition-all active:scale-95"
             >
               Continue Questing
             </button>

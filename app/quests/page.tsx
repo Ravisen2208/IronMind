@@ -129,7 +129,7 @@ export default function MyQuestsPage() {
       {/* Header */}
       <FadeIn yOffset={10} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
             My Quests
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
@@ -146,7 +146,7 @@ export default function MyQuestsPage() {
           </button>
           <button
             onClick={() => setIsCreateOpen(!isCreateOpen)}
-            className="text-xs font-semibold px-4 py-2.5 rounded-full bg-accent text-white hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5"
+            className="text-xs font-semibold px-4 py-2.5 rounded-full bg-accent text-cream hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5 uppercase tracking-wide"
           >
             <Plus className="w-4 h-4" />
             <span>{isCreateOpen ? "Close Form" : "Create Quest"}</span>

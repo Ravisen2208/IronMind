@@ -13,9 +13,9 @@ export function FloatingStats() {
         initial={{ opacity: 0, scale: 0.9, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.7, ease: appleEasing }}
-        className="z-10 p-6 rounded-3xl bg-white/95 backdrop-blur-xl border border-divider shadow-float text-center max-w-xs pointer-events-auto"
+        className="z-10 p-6 rounded-3xl bg-cream/95 backdrop-blur-xl border border-divider shadow-float text-center max-w-xs pointer-events-auto"
       >
-        <div className="w-12 h-12 rounded-2xl bg-accent text-white flex items-center justify-center mx-auto mb-3 shadow-glow">
+        <div className="w-12 h-12 rounded-2xl bg-accent text-cream flex items-center justify-center mx-auto mb-3 shadow-glow">
           <Sparkles className="w-6 h-6" />
         </div>
         <div className="text-xs uppercase tracking-widest text-accent font-bold mb-0.5">
@@ -27,7 +27,7 @@ export function FloatingStats() {
         <p className="text-xs text-text-secondary mt-1">
           740 / 850 XP to Next Milestone
         </p>
-        <div className="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+        <div className="w-full bg-warm-light h-2 rounded-full mt-3 overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: "87%" }}
@@ -50,7 +50,7 @@ export function FloatingStats() {
           x: { duration: 0.6, delay: 0.2 },
           y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
         }}
-        className="absolute top-2 left-2 sm:-left-4 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
+        className="absolute top-2 left-2 sm:-left-4 p-3.5 rounded-2xl bg-cream/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
       >
         <div className="w-9 h-9 rounded-xl bg-success-light text-success flex items-center justify-center">
           <Flame className="w-5 h-5 fill-success/20" />
@@ -76,9 +76,9 @@ export function FloatingStats() {
           x: { duration: 0.6, delay: 0.3 },
           y: { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 },
         }}
-        className="absolute top-6 right-2 sm:-right-4 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
+        className="absolute top-6 right-2 sm:-right-4 p-3.5 rounded-2xl bg-cream/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
       >
-        <div className="w-9 h-9 rounded-xl bg-orange-50 text-warm flex items-center justify-center">
+        <div className="w-9 h-9 rounded-xl bg-warm-light text-warm-dark flex items-center justify-center">
           <Dumbbell className="w-5 h-5" />
         </div>
         <div>
@@ -102,7 +102,7 @@ export function FloatingStats() {
           x: { duration: 0.6, delay: 0.4 },
           y: { duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
         }}
-        className="absolute bottom-4 left-4 sm:left-0 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
+        className="absolute bottom-4 left-4 sm:left-0 p-3.5 rounded-2xl bg-cream/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
       >
         <div className="w-9 h-9 rounded-xl bg-accent-light text-accent flex items-center justify-center">
           <Brain className="w-5 h-5" />
@@ -128,7 +128,7 @@ export function FloatingStats() {
           x: { duration: 0.6, delay: 0.5 },
           y: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 },
         }}
-        className="absolute bottom-6 right-4 sm:right-0 p-3.5 rounded-2xl bg-white/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
+        className="absolute bottom-6 right-4 sm:right-0 p-3.5 rounded-2xl bg-cream/90 backdrop-blur-md border border-divider shadow-card flex items-center gap-3 pointer-events-auto"
       >
         <div className="w-9 h-9 rounded-xl bg-warm-light text-warm flex items-center justify-center">
           <Coins className="w-5 h-5 fill-warm/20" />

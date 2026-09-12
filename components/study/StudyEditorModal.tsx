@@ -223,7 +223,7 @@ export function StudyEditorModal({
                 <button
                   type="submit"
                   disabled={loading || !subject.trim()}
-                  className="flex-1 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 disabled:opacity-50"
+                  className="flex-1 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-xs font-semibold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 disabled:opacity-50"
                 >
                   {loading ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />

@@ -447,7 +447,7 @@ export function StudyTracker() {
 
           <button
             onClick={() => setIsFormOpen(!isFormOpen)}
-            className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-white hover:bg-accent-hover transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+            className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-cream hover:bg-accent-hover transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
           >
             <Plus className="w-4 h-4" />
             <span>{isFormOpen ? "Close Form" : "Log Study Session"}</span>
@@ -480,7 +480,7 @@ export function StudyTracker() {
                   onClick={() => handleSelectPreset(p)}
                   className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                     subject === p.subject
-                      ? "bg-accent text-white border-accent font-semibold shadow-sm"
+                      ? "bg-accent text-cream border-accent font-semibold shadow-sm"
                       : "bg-slate-50 text-text-secondary border-divider hover:bg-slate-100"
                   }`}
                 >
@@ -569,7 +569,7 @@ export function StudyTracker() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-2 rounded-full bg-accent text-white font-semibold text-xs hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5"
+                className="px-6 py-2 rounded-full bg-accent text-cream font-semibold text-xs hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5"
               >
                 {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
                 <span>Add Study Quest</span>
@@ -702,7 +702,7 @@ export function StudyTracker() {
             </div>
             <button
               onClick={() => handleOpenPresetModal()}
-              className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-white hover:bg-accent-hover transition-all flex items-center gap-1.5 shadow-sm"
+              className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-cream hover:bg-accent-hover transition-all flex items-center gap-1.5 shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Create Subject Directive</span>
@@ -846,7 +846,7 @@ export function StudyTracker() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-full bg-accent text-white text-xs font-semibold"
+                  className="flex-1 py-2 rounded-full bg-accent text-cream text-xs font-semibold"
                 >
                   Save Directive
                 </button>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { FloatingStats } from "../animations/FloatingStats";
 import { LoginForm } from "../auth/LoginForm";
@@ -17,8 +18,8 @@ export function HeroSection() {
         {/* Top Tagline Badge */}
         <FadeIn delay={0.1} yOffset={10} className="flex justify-center mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface/90 border border-divider/80 shadow-subtle backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-xs font-semibold text-text-secondary tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-bronze animate-pulse" />
+            <span className="text-xs font-semibold text-text-secondary tracking-wide uppercase">
               The Next-Gen RPG Productivity Platform
             </span>
           </div>
@@ -27,10 +28,10 @@ export function HeroSection() {
         {/* Hero Title & Pitch */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <FadeIn delay={0.2} yOffset={20}>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-text-primary leading-[1.08]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif tracking-tight text-text-primary leading-[1.08]">
               Train your mind.
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-blue-600 to-indigo-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-bronze via-warm-dark to-accent">
                 Complete your quests.
               </span>
               <br />
@@ -49,7 +50,7 @@ export function HeroSection() {
           <FadeIn delay={0.5} yOffset={15} className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/signup"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-accent hover:bg-accent-hover text-white text-sm font-semibold shadow-md shadow-accent/20 transition-all duration-200 active:scale-95"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-md transition-all duration-200 active:scale-95"
             >
               <span>Begin Your Progression</span>
               <ArrowRight className="w-4 h-4" />
@@ -60,17 +61,46 @@ export function HeroSection() {
                 const el = document.getElementById("auth-experience");
                 el?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-surface hover:bg-slate-50 text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-surface hover:bg-warm-light text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95"
             >
               <span>Sign In to Character</span>
             </button>
           </FadeIn>
         </div>
 
+        {/* Hero Image */}
+        <FadeIn delay={0.6} yOffset={30} className="mt-12 sm:mt-16">
+          <div className="relative max-w-4xl mx-auto rounded-4xl overflow-hidden shadow-warm border border-divider/50">
+            <Image
+              src="/images/hero-ironmind.jpg"
+              alt="IronMind — Premium productivity meets RPG progression"
+              width={1400}
+              height={788}
+              priority
+              className="w-full h-auto object-cover"
+            />
+            {/* Warm gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
+          </div>
+        </FadeIn>
+
         {/* Coordinated Floating Graphic Area */}
         <div className="mt-12 sm:mt-16">
           <FloatingStats />
         </div>
+
+        {/* Feature Cards with Generated Image */}
+        <FadeIn delay={0.3} yOffset={20} className="mt-8">
+          <div className="relative max-w-3xl mx-auto rounded-4xl overflow-hidden shadow-warm border border-divider/50">
+            <Image
+              src="/images/feature-cards.jpg"
+              alt="XP, Streaks, and Coins — IronMind progression system"
+              width={1400}
+              height={788}
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        </FadeIn>
 
         {/* Feature Stagger Highlights */}
         <StaggerContainer
@@ -84,10 +114,10 @@ export function HeroSection() {
             <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center mb-3">
               <Zap className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-text-primary tracking-tight">
+            <h3 className="text-base font-serif text-text-primary tracking-tight">
               Anti-Cheat Progression
             </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
               Every point of XP, streak, and coin reward is calculated and verified server-side via atomic transactions.
             </p>
           </motion.div>
@@ -96,14 +126,14 @@ export function HeroSection() {
             variants={staggerItem}
             className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle"
           >
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-success flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center mb-3">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-text-primary tracking-tight">
-              Apple-Grade Aesthetics
+            <h3 className="text-base font-serif text-text-primary tracking-tight">
+              Premium Aesthetics
             </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed">
-              Designed with Apple Health minimalism: fluid cubic-bezier motion, subtle glowing accents, and zero distracting clutter.
+            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
+              Designed with warm minimalism: fluid cubic-bezier motion, subtle champagne accents, and zero distracting clutter.
             </p>
           </motion.div>
 
@@ -111,13 +141,13 @@ export function HeroSection() {
             variants={staggerItem}
             className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle"
           >
-            <div className="w-10 h-10 rounded-2xl bg-warm-light text-warm flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-warning-light text-warning flex items-center justify-center mb-3">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-text-primary tracking-tight">
+            <h3 className="text-base font-serif text-text-primary tracking-tight">
               Gemini AI Directives
             </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
               Generate actionable, concrete micro-quests with free-tier Gemini AI and resilient offline fallback.
             </p>
           </motion.div>
@@ -126,10 +156,10 @@ export function HeroSection() {
         {/* In-Page Auth Portal */}
         <div id="auth-experience" className="mt-20 pt-10 border-t border-divider/60">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
               Ready to embark?
             </h2>
-            <p className="text-sm text-text-secondary mt-1">
+            <p className="text-sm text-text-secondary mt-1 font-sans">
               Sign in to your IronMind character or launch an instant guest sandbox.
             </p>
           </div>

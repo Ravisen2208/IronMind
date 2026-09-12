@@ -105,7 +105,7 @@ export default function DashboardPage() {
       {/* Top Header */}
       <FadeIn yOffset={10} duration={0.5} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
             Overview & Progression
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
@@ -123,7 +123,7 @@ export default function DashboardPage() {
 
           <button
             onClick={() => setIsQuickCreateOpen(!isQuickCreateOpen)}
-            className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-white hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5"
+            className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-cream hover:bg-accent-hover transition-all active:scale-95 shadow-sm flex items-center gap-1.5 uppercase tracking-wide"
           >
             <Plus className="w-4 h-4" />
             <span>{isQuickCreateOpen ? "Close" : "Quick Quest"}</span>

@@ -11,7 +11,7 @@ export default function StudyPage() {
     <div className="w-full px-4 sm:px-8 lg:px-12 py-8 space-y-6">
       <FadeIn yOffset={10}>
         <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
             Study & Cognitive Mastery
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">

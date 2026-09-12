@@ -150,7 +150,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
         <button
           type="submit"
           disabled={isSubmitting || !title.trim()}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-accent text-white font-semibold text-sm hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-50 shadow-sm shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-accent text-cream font-semibold text-sm hover:bg-accent-hover transition-all active:scale-95 disabled:opacity-50 shadow-sm shrink-0"
         >
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 animate-spin" />

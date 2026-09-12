@@ -32,7 +32,7 @@ export function EmptyState({ type, onAction, actionText }: EmptyStateProps) {
       {isActive && onAction && (
         <button
           onClick={onAction}
-          className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-white hover:bg-accent-hover transition-all active:scale-95 shadow-sm"
+          className="text-xs font-semibold px-4 py-2 rounded-full bg-accent text-cream hover:bg-accent-hover transition-all active:scale-95 shadow-sm"
         >
           {actionText || "Get Started"}
         </button>

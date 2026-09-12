@@ -123,7 +123,7 @@ export function QuestCard({
               )}
             </button>
           ) : (
-            <div className="w-7 h-7 mt-0.5 rounded-full bg-success text-white flex items-center justify-center shrink-0 shadow-sm">
+            <div className="w-7 h-7 mt-0.5 rounded-full bg-success text-cream flex items-center justify-center shrink-0 shadow-sm">
               <Check className="w-4 h-4 stroke-[3]" />
             </div>
           )}

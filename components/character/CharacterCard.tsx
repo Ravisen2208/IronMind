@@ -34,8 +34,8 @@ export function CharacterCard({ stats, isLeveledUp = false }: CharacterCardProps
         {/* Avatar & Identity */}
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-accent to-accent-hover text-white flex items-center justify-center shadow-md shadow-accent/20">
-              <Shield className="w-8 h-8 sm:w-10 sm:h-10 fill-white/20" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-accent to-accent-hover text-cream flex items-center justify-center shadow-md">
+              <Shield className="w-8 h-8 sm:w-10 sm:h-10 fill-cream/20" />
             </div>
             <div className="absolute -bottom-2 -right-1 px-2 py-0.5 rounded-full bg-accent-light border border-accent/20 text-accent font-bold text-[11px] shadow-sm flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
@@ -45,10 +45,10 @@ export function CharacterCard({ stats, isLeveledUp = false }: CharacterCardProps
 
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-serif text-text-primary tracking-tight">
                 {stats.email ? stats.email.split("@")[0] : "IronMind Warrior"}
               </h2>
-              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-success text-xs font-semibold border border-success/20">
+              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-success-light text-success text-xs font-semibold border border-success/20">
                 <UserCheck className="w-3 h-3" />
                 Active
               </span>
