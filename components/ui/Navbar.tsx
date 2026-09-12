@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 import {
   Shield,
   Sparkles,
@@ -65,18 +66,19 @@ export function Navbar() {
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`text-xs font-semibold px-3.5 py-2 rounded-full transition-all flex items-center gap-1.5 ${
-                      isActive
-                        ? "bg-accent/10 text-accent font-bold"
-                        : "text-text-secondary hover:text-text-primary hover:bg-warm/30"
-                    }`}
-                  >
-                    <item.icon className="w-3.5 h-3.5" />
-                    <span>{item.label}</span>
-                  </Link>
+                  <MagneticButton key={item.href} strength={0.25} dataCursorText={item.label}>
+                    <Link
+                      href={item.href}
+                      className={`text-xs font-semibold px-3.5 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+                        isActive
+                          ? "bg-accent/10 text-accent font-bold"
+                          : "text-text-secondary hover:text-text-primary hover:bg-warm/30"
+                      }`}
+                    >
+                      <item.icon className="w-3.5 h-3.5" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </MagneticButton>
                 );
               })}
             </>
@@ -94,14 +96,16 @@ export function Navbar() {
                 </div>
               )}
 
-              <button
-                onClick={handleLogout}
-                className="hidden md:flex items-center gap-1 text-xs text-text-secondary hover:text-danger px-3 py-1.5 rounded-full hover:bg-danger-light transition-colors active:scale-95"
-                aria-label="Log out"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                <span>Logout</span>
-              </button>
+              <MagneticButton strength={0.2}>
+                <button
+                  onClick={handleLogout}
+                  className="hidden md:flex items-center gap-1 text-xs text-text-secondary hover:text-danger px-3 py-1.5 rounded-full hover:bg-danger-light transition-colors active:scale-95"
+                  aria-label="Log out"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Logout</span>
+                </button>
+              </MagneticButton>
             </>
           ) : (
             <div className="flex items-center gap-2">
@@ -111,12 +115,14 @@ export function Navbar() {
               >
                 Sign In
               </Link>
-              <Link
-                href="/signup"
-                className="text-xs font-semibold bg-accent text-cream px-5 py-2.5 rounded-full hover:bg-accent-hover shadow-sm tracking-wide uppercase transition-all active:scale-95"
-              >
-                Start Building
-              </Link>
+              <MagneticButton strength={0.3} dataCursorText="Start">
+                <Link
+                  href="/signup"
+                  className="text-xs font-semibold bg-accent text-cream px-5 py-2.5 rounded-full hover:bg-accent-hover shadow-sm tracking-wide uppercase transition-all active:scale-95"
+                >
+                  Start Building
+                </Link>
+              </MagneticButton>
             </div>
           )}
         </div>
