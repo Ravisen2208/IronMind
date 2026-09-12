@@ -60,16 +60,37 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
 
     setIsSubmitting(true);
     try {
+      const derivedType: TaskType =
+        category.toLowerCase() === "gym" ? "gym" : category.toLowerCase() === "study" ? "study" : type;
+
+      const payload: any = {
+        title: trimmedTitle,
+        description: description.trim(),
+        type: derivedType,
+        category,
+        priority,
+        dueDate: dueDate || null,
+      };
+
+      if (derivedType === "gym") {
+        payload.gym = {
+          exercise: trimmedTitle,
+          muscleGroup: "Fitness",
+          sets: 4,
+          reps: 10,
+          duration: 30,
+        };
+      } else if (derivedType === "study") {
+        payload.study = {
+          subject: trimmedTitle,
+          topic: "Deep Focus",
+          duration: 30,
+        };
+      }
+
       const res = await apiRequest<{ success: boolean; task: TaskItem }>("/api/tasks", {
         method: "POST",
-        body: JSON.stringify({
-          title: trimmedTitle,
-          description: description.trim(),
-          type,
-          category,
-          priority,
-          dueDate: dueDate || null,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.success && res.data?.task) {
