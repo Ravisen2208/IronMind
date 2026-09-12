@@ -30,6 +30,7 @@ export const metadata: Metadata = {
 };
 
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { WebsiteIntroLoader } from "@/components/animations/WebsiteIntroLoader";
 
 export default function RootLayout({
   children,
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased selection:bg-champagne/40 selection:text-text-primary">
         <AuthProvider>
           <ToastProvider>
+            <WebsiteIntroLoader />
             <CustomCursor />
             <AnimatedBackground />
             <Navbar />
