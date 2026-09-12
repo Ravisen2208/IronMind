@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { requireAuth, AuthenticatedRequest } from "../lib/auth.js";
-import { getUserProfile, initializeUserProfile } from "../lib/db.js";
+import { requireAuth, AuthenticatedRequest } from "../lib/auth";
+import { getUserProfile, initializeUserProfile } from "../lib/db";
 
 const router = Router();
 

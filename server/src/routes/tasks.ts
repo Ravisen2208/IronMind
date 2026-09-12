@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { requireAuth, AuthenticatedRequest } from "../lib/auth.js";
+import { requireAuth, AuthenticatedRequest } from "../lib/auth";
 import {
   getUserTasks,
   createNewTask,
   updateTask,
   deleteTask,
   completeTask,
-} from "../lib/db.js";
+} from "../lib/db";
 
 const router = Router();
 
@@ -94,7 +94,7 @@ router.post("/complete", requireAuth, async (req: AuthenticatedRequest, res) => 
 router.patch("/:id", requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const user = req.user!;
-    const taskId = req.params.id;
+    const taskId = String(req.params.id);
     const body = req.body;
 
     const task = await updateTask(user.uid, taskId, body);
@@ -112,7 +112,7 @@ router.patch("/:id", requireAuth, async (req: AuthenticatedRequest, res) => {
 router.delete("/:id", requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const user = req.user!;
-    const taskId = req.params.id;
+    const taskId = String(req.params.id);
 
     await deleteTask(user.uid, taskId);
     return res.status(200).json({

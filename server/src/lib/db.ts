@@ -1,10 +1,10 @@
-import { adminDb, isFirebaseAdminConfigured } from "./firebase-admin.js";
+import { adminDb, isFirebaseAdminConfigured } from "./firebase-admin";
 import {
   calculateLevelProgression,
   calculateStreak,
   getAuthoritativeRewards,
   getAttributeImpact,
-} from "./progression.js";
+} from "./progression";
 import {
   UserProfile,
   TaskItem,
@@ -15,9 +15,9 @@ import {
   TaskPriority,
   GymDetails,
   StudyDetails,
-} from "../types/index.js";
+} from "../types";
 
-export * from "../types/index.js";
+export * from "../types";
 
 const memoryUsers = new Map<string, UserProfile>();
 const memoryTasks = new Map<string, TaskItem[]>();
@@ -241,7 +241,7 @@ export async function updateTask(
       };
       delete (updated as any).id;
       await ref.update(updated);
-      return { id: taskId, ...updated };
+      return updated;
     } catch (err: any) {
       if (err.message === "Completed quests cannot be modified.") throw err;
       console.warn("Firestore updateTask fallback:", err);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth, AuthenticatedRequest } from "../lib/auth.js";
+import { requireAuth, AuthenticatedRequest } from "../lib/auth";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const router = Router();

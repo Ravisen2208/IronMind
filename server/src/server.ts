@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import userRouter from "./routes/user.js";
-import tasksRouter from "./routes/tasks.js";
-import categoriesRouter from "./routes/categories.js";
-import questAiRouter from "./routes/questAi.js";
+import userRouter from "./routes/user";
+import tasksRouter from "./routes/tasks";
+import categoriesRouter from "./routes/categories";
+import questAiRouter from "./routes/questAi";
 
 dotenv.config();
 

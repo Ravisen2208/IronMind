@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { requireAuth, AuthenticatedRequest } from "../lib/auth.js";
-import { getUserCategories, createCategory, deleteCategory } from "../lib/db.js";
+import { requireAuth, AuthenticatedRequest } from "../lib/auth";
+import { getUserCategories, createCategory, deleteCategory } from "../lib/db";
 
 const router = Router();
 
@@ -45,7 +45,7 @@ router.post("/", requireAuth, async (req: AuthenticatedRequest, res) => {
 router.delete("/:id", requireAuth, async (req: AuthenticatedRequest, res) => {
   try {
     const user = req.user!;
-    const categoryId = req.params.id;
+    const categoryId = String(req.params.id);
 
     await deleteCategory(user.uid, categoryId);
     return res.status(200).json({

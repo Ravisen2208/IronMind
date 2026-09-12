@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { adminAuth, isFirebaseAdminConfigured } from "./firebase-admin.js";
+import { adminAuth, isFirebaseAdminConfigured } from "./firebase-admin";
 
 export interface AuthenticatedUser {
   uid: string;
