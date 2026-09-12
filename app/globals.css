@@ -16,8 +16,14 @@
     --divider-light: #E5E5EA;
   }
 
-  * {
+  *,
+  *::before,
+  *::after {
     border-color: var(--divider-light);
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
@@ -28,6 +34,7 @@
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.015em;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -46,7 +53,7 @@
   }
 }
 
-/* Apple-style smooth glassmorphic header */
+/* Apple-style smooth glassmorphic navigation header */
 .glass-nav {
   background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(20px);
@@ -54,6 +61,7 @@
   border-bottom: 1px solid rgba(210, 210, 215, 0.4);
 }
 
+/* Glass card component styling */
 .glass-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
@@ -61,7 +69,7 @@
   border: 1px solid rgba(210, 210, 215, 0.6);
 }
 
-/* Subtle glowing aura */
+/* Subtle glowing aura accents */
 .glow-accent {
   box-shadow: 0 0 40px -10px rgba(0, 113, 227, 0.35);
 }
