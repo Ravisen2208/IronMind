@@ -7,6 +7,7 @@ import { apiRequest } from "@/lib/api";
 import { QuestCard } from "@/components/quests/QuestCard";
 import { LevelUpModal } from "@/components/animations/LevelUpModal";
 import { GymEditorModal } from "@/components/gym/GymEditorModal";
+import { SevenDayGymRoutine } from "@/components/gym/SevenDayGymRoutine";
 import { useToast } from "@/components/ui/Toast";
 import { StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
@@ -54,7 +55,7 @@ export function GymTracker() {
 
   const [gymTasks, setGymTasks] = useState<TaskItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"active" | "presets" | "history">("active");
+  const [activeTab, setActiveTab] = useState<"active" | "7day" | "presets" | "history">("active");
   const [searchQuery, setSearchQuery] = useState("");
   const [muscleFilter, setMuscleFilter] = useState("all");
 
@@ -402,6 +403,17 @@ export function GymTracker() {
             Active Workouts ({activeWorkouts.length})
           </button>
           <button
+            onClick={() => setActiveTab("7day")}
+            className={`text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeTab === "7day"
+                ? "bg-white text-warm font-bold shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>7-Day Split Routine</span>
+          </button>
+          <button
             onClick={() => setActiveTab("presets")}
             className={`text-xs font-bold px-4 py-2 rounded-lg transition-all ${
               activeTab === "presets"
@@ -409,7 +421,7 @@ export function GymTracker() {
                 : "text-text-secondary hover:text-text-primary"
             }`}
           >
-            Routines & Presets ({presets.length})
+            Exercise Library ({presets.length})
           </button>
           <button
             onClick={() => setActiveTab("history")}
@@ -640,6 +652,16 @@ export function GymTracker() {
             )}
           </div>
         </div>
+      )}
+
+      {/* VIEW: 7-Day Battle Routine */}
+      {activeTab === "7day" && (
+        <SevenDayGymRoutine
+          onWorkoutLaunched={(newTask) => {
+            setGymTasks((prev) => [newTask, ...prev]);
+            setActiveTab("active");
+          }}
+        />
       )}
 
       {/* VIEW 2: Routines & Presets Manager */}

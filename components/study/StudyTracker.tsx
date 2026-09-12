@@ -7,6 +7,8 @@ import { apiRequest } from "@/lib/api";
 import { QuestCard } from "@/components/quests/QuestCard";
 import { LevelUpModal } from "@/components/animations/LevelUpModal";
 import { StudyEditorModal } from "@/components/study/StudyEditorModal";
+import { SevenDayStudyRoutine } from "@/components/study/SevenDayStudyRoutine";
+import { DsaCodeStudio } from "@/components/study/DsaCodeStudio";
 import { useToast } from "@/components/ui/Toast";
 import { StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,6 +28,8 @@ import {
   Trash2,
   Edit3,
   Play,
+  Code2,
+  Calendar,
 } from "lucide-react";
 
 export interface StudyPreset {
@@ -52,7 +56,8 @@ export function StudyTracker() {
 
   const [studyTasks, setStudyTasks] = useState<TaskItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"active" | "presets" | "history">("active");
+  const [activeTab, setActiveTab] = useState<"active" | "7day" | "dsa" | "presets" | "history">("active");
+  const [activeDsaProblemId, setActiveDsaProblemId] = useState<string>("two-sum");
   const [searchQuery, setSearchQuery] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("all");
 
@@ -386,6 +391,28 @@ export function StudyTracker() {
             Active Sessions ({activeQuests.length})
           </button>
           <button
+            onClick={() => setActiveTab("7day")}
+            className={`text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeTab === "7day"
+                ? "bg-white text-accent font-bold shadow-sm"
+                : "text-text-secondary hover:text-text-primary"
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>7-Day Split Routine</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("dsa")}
+            className={`text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
+              activeTab === "dsa"
+                ? "bg-indigo-600 text-white font-bold shadow-sm"
+                : "text-indigo-600 hover:bg-indigo-50 font-bold"
+            }`}
+          >
+            <Code2 className="w-3.5 h-3.5" />
+            <span>DSA Code Studio</span>
+          </button>
+          <button
             onClick={() => setActiveTab("presets")}
             className={`text-xs font-bold px-4 py-2 rounded-lg transition-all ${
               activeTab === "presets"
@@ -393,7 +420,7 @@ export function StudyTracker() {
                 : "text-text-secondary hover:text-text-primary"
             }`}
           >
-            Subjects & Topics ({presets.length})
+            Topics Library ({presets.length})
           </button>
           <button
             onClick={() => setActiveTab("history")}
@@ -555,6 +582,32 @@ export function StudyTracker() {
       {/* VIEW 1 & VIEW 3: Active Sessions & History */}
       {(activeTab === "active" || activeTab === "history") && (
         <div className="space-y-4">
+          {/* Quick DSA Callout Banner */}
+          {activeTab === "active" && (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-blue-50/60 to-surface border border-indigo-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-subtle">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                  <Code2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-text-primary">
+                    Practicing Algorithms &amp; Data Structures?
+                  </h4>
+                  <p className="text-[11px] text-text-secondary">
+                    Write, test, and execute live code against automated test cases in the built-in DSA Code Studio.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveTab("dsa")}
+                className="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+              >
+                <span>Launch Code Editor</span>
+                <Code2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-text-secondary absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -611,6 +664,27 @@ export function StudyTracker() {
               ))
             )}
           </div>
+        </div>
+      )}
+
+      {/* VIEW: 7-Day Cognitive Mastery Routine */}
+      {activeTab === "7day" && (
+        <SevenDayStudyRoutine
+          onStudyLaunched={(newTask) => {
+            setStudyTasks((prev) => [newTask, ...prev]);
+            setActiveTab("active");
+          }}
+          onOpenDsaStudio={(problemId) => {
+            if (problemId) setActiveDsaProblemId(problemId);
+            setActiveTab("dsa");
+          }}
+        />
+      )}
+
+      {/* VIEW: DSA Code Studio */}
+      {activeTab === "dsa" && (
+        <div className="space-y-4">
+          <DsaCodeStudio defaultProblemId={activeDsaProblemId} />
         </div>
       )}
 

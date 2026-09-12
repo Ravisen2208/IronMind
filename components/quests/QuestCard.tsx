@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { TaskItem, CompletionResponse } from "@/types";
+import Link from "next/link";
 import {
   Check,
   Trash2,
@@ -14,6 +15,7 @@ import {
   Dumbbell,
   BookOpen,
   Tag,
+  Code2,
 } from "lucide-react";
 import { appleEasing } from "../animations/MotionWrapper";
 import { formatDate } from "@/lib/utils";
@@ -169,12 +171,26 @@ export function QuestCard({
 
             {/* Study specific metadata */}
             {task.type === "study" && task.study && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-text-secondary bg-blue-50/60 border border-blue-200/50 px-2.5 py-1 rounded-xl w-fit">
-                <BookOpen className="w-3.5 h-3.5 text-accent" />
-                <span>
-                  {task.study.subject || "Study"} • {task.study.topic || "Deep Focus"} •{" "}
-                  {task.study.duration || 25} mins
-                </span>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <div className="flex items-center gap-2 text-xs text-text-secondary bg-blue-50/60 border border-blue-200/50 px-2.5 py-1 rounded-xl w-fit">
+                  <BookOpen className="w-3.5 h-3.5 text-accent" />
+                  <span>
+                    {task.study.subject || "Study"} • {task.study.topic || "Deep Focus"} •{" "}
+                    {task.study.duration || 25} mins
+                  </span>
+                </div>
+                {(task.title.toLowerCase().includes("dsa") ||
+                  task.study.subject?.toLowerCase().includes("dsa") ||
+                  task.study.topic?.toLowerCase().includes("algorithm") ||
+                  task.title.toLowerCase().includes("code")) && (
+                  <Link
+                    href="/study"
+                    className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/60 px-2.5 py-1 rounded-xl transition-all shadow-subtle"
+                  >
+                    <Code2 className="w-3 h-3" />
+                    <span>DSA Code Studio</span>
+                  </Link>
+                )}
               </div>
             )}
 
