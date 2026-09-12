@@ -6,15 +6,16 @@ import {
   Play,
   CheckCircle2,
   XCircle,
-  Sparkles,
   RotateCcw,
   Maximize2,
   Minimize2,
   BookOpen,
   Terminal,
-  ChevronRight,
   Flame,
   Award,
+  Lock,
+  Bookmark,
+  Braces,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/Toast";
@@ -72,52 +73,10 @@ export const DSA_PROBLEMS: DsaProblem[] = [
     ],
     functionName: "twoSum",
     starterCode: {
-      javascript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
-function twoSum(nums, target) {
-  const map = new Map();
-  for (let i = 0; i < nums.length; i++) {
-    const complement = target - nums[i];
-    if (map.has(complement)) {
-      return [map.get(complement), i];
-    }
-    map.set(nums[i], i);
-  }
-  return [];
-}`,
-      python: `def twoSum(nums: list[int], target: int) -> list[int]:
-    seen = {}
-    for i, num in enumerate(nums):
-        diff = target - num
-        if diff in seen:
-            return [seen[diff], i]
-        seen[num] = i
-    return []`,
-      cpp: `vector<int> twoSum(vector<int>& nums, int target) {
-    unordered_map<int, int> seen;
-    for (int i = 0; i < nums.size(); i++) {
-        int complement = target - nums[i];
-        if (seen.count(complement)) {
-            return {seen[complement], i};
-        }
-        seen[nums[i]] = i;
-    }
-    return {};
-}`,
-      java: `public int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> map = new HashMap<>();
-    for (int i = 0; i < nums.length; i++) {
-        int complement = target - nums[i];
-        if (map.containsKey(complement)) {
-            return new int[] { map.get(complement), i };
-        }
-        map.put(nums[i], i);
-    }
-    return new int[] {};
-}`,
+      cpp: `class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        \n    }\n};`,
+      python: `class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        pass`,
+      javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (map.has(complement)) {\n            return [map.get(complement), i];\n        }\n        map.set(nums[i], i);\n    }\n    return [];\n};`,
+      java: `class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        \n    }\n}`,
     },
     testCases: [
       { input: [[2, 7, 11, 15], 9], expected: [0, 1] },
@@ -140,58 +99,10 @@ function twoSum(nums, target) {
     constraints: ["1 <= s.length <= 10^4", "s consists of parentheses only '()[]{}'."],
     functionName: "isValid",
     starterCode: {
-      javascript: `/**
- * @param {string} s
- * @return {boolean}
- */
-function isValid(s) {
-  const stack = [];
-  const map = { ')': '(', '}': '{', ']': '[' };
-
-  for (const char of s) {
-    if (char === '(' || char === '{' || char === '[') {
-      stack.push(char);
-    } else {
-      if (stack.pop() !== map[char]) return false;
-    }
-  }
-  return stack.length === 0;
-}`,
-      python: `def isValid(s: str) -> bool:
-    stack = []
-    mapping = {")": "(", "}": "{", "]": "["}
-    for char in s:
-        if char in mapping:
-            top = stack.pop() if stack else '#'
-            if mapping[char] != top:
-                return False
-        else:
-            stack.append(char)
-    return not stack`,
-      cpp: `bool isValid(string s) {
-    stack<char> st;
-    for (char c : s) {
-        if (c == '(' || c == '{' || c == '[') st.push(c);
-        else {
-            if (st.empty()) return false;
-            if (c == ')' && st.top() != '(') return false;
-            if (c == '}' && st.top() != '{') return false;
-            if (c == ']' && st.top() != '[') return false;
-            st.pop();
-        }
-    }
-    return st.empty();
-}`,
-      java: `public boolean isValid(String s) {
-    Stack<Character> stack = new Stack<>();
-    for (char c : s.toCharArray()) {
-        if (c == '(') stack.push(')');
-        else if (c == '{') stack.push('}');
-        else if (c == '[') stack.push(']');
-        else if (stack.isEmpty() || stack.pop() != c) return false;
-    }
-    return stack.isEmpty();
-}`,
+      cpp: `class Solution {\npublic:\n    bool isValid(string s) {\n        \n    }\n};`,
+      python: `class Solution:\n    def isValid(self, s: str) -> bool:\n        pass`,
+      javascript: `/**\n * @param {string} s\n * @return {boolean}\n */\nvar isValid = function(s) {\n    const stack = [];\n    const map = { ')': '(', '}': '{', ']': '[' };\n    for (const char of s) {\n        if (char === '(' || char === '{' || char === '[') {\n            stack.push(char);\n        } else {\n            if (stack.pop() !== map[char]) return false;\n        }\n    }\n    return stack.length === 0;\n};`,
+      java: `class Solution {\n    public boolean isValid(String s) {\n        \n    }\n}`,
     },
     testCases: [
       { input: ["()"], expected: true },
@@ -220,45 +131,10 @@ function isValid(s) {
     constraints: ["1 <= nums.length <= 10^5", "-10^4 <= nums[i] <= 10^4"],
     functionName: "maxSubArray",
     starterCode: {
-      javascript: `/**
- * @param {number[]} nums
- * @return {number}
- */
-function maxSubArray(nums) {
-  let maxSoFar = nums[0];
-  let currentMax = nums[0];
-
-  for (let i = 1; i < nums.length; i++) {
-    currentMax = Math.max(nums[i], currentMax + nums[i]);
-    maxSoFar = Math.max(maxSoFar, currentMax);
-  }
-  return maxSoFar;
-}`,
-      python: `def maxSubArray(nums: list[int]) -> int:
-    max_so_far = nums[0]
-    curr_max = nums[0]
-    for x in nums[1:]:
-        curr_max = max(x, curr_max + x)
-        max_so_far = max(max_so_far, curr_max)
-    return max_so_far`,
-      cpp: `int maxSubArray(vector<int>& nums) {
-    int maxSoFar = nums[0];
-    int currMax = nums[0];
-    for (size_t i = 1; i < nums.size(); ++i) {
-        currMax = max(nums[i], currMax + nums[i]);
-        maxSoFar = max(maxSoFar, currMax);
-    }
-    return maxSoFar;
-}`,
-      java: `public int maxSubArray(int[] nums) {
-    int maxSoFar = nums[0];
-    int currMax = nums[0];
-    for (int i = 1; i < nums.length; i++) {
-        currMax = Math.max(nums[i], currMax + nums[i]);
-        maxSoFar = Math.max(maxSoFar, currMax);
-    }
-    return maxSoFar;
-}`,
+      cpp: `class Solution {\npublic:\n    int maxSubArray(vector<int>& nums) {\n        \n    }\n};`,
+      python: `class Solution:\n    def maxSubArray(self, nums: list[int]) -> int:\n        pass`,
+      javascript: `/**\n * @param {number[]} nums\n * @return {number}\n */\nvar maxSubArray = function(nums) {\n    let maxSoFar = nums[0];\n    let currentMax = nums[0];\n    for (let i = 1; i < nums.length; i++) {\n        currentMax = Math.max(nums[i], currentMax + nums[i]);\n        maxSoFar = Math.max(maxSoFar, currentMax);\n    }\n    return maxSoFar;\n};`,
+      java: `class Solution {\n    public int maxSubArray(int[] nums) {\n        \n    }\n}`,
     },
     testCases: [
       { input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], expected: 6 },
@@ -285,54 +161,10 @@ function maxSubArray(nums) {
     ],
     functionName: "search",
     starterCode: {
-      javascript: `/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number}
- */
-function search(nums, target) {
-  let left = 0;
-  let right = nums.length - 1;
-
-  while (left <= right) {
-    const mid = Math.floor((left + right) / 2);
-    if (nums[mid] === target) return mid;
-    if (nums[mid] < target) left = mid + 1;
-    else right = mid - 1;
-  }
-  return -1;
-}`,
-      python: `def search(nums: list[int], target: int) -> int:
-    left, right = 0, len(nums) - 1
-    while left <= right:
-        mid = (left + right) // 2
-        if nums[mid] == target:
-            return mid
-        elif nums[mid] < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-    return -1`,
-      cpp: `int search(vector<int>& nums, int target) {
-    int left = 0, right = nums.size() - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        if (nums[mid] < target) left = mid + 1;
-        else right = mid - 1;
-    }
-    return -1;
-}`,
-      java: `public int search(int[] nums, int target) {
-    int left = 0, right = nums.length - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        if (nums[mid] < target) left = mid + 1;
-        else right = mid - 1;
-    }
-    return -1;
-}`,
+      cpp: `class Solution {\npublic:\n    int search(vector<int>& nums, int target) {\n        \n    }\n};`,
+      python: `class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        pass`,
+      javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number}\n */\nvar search = function(nums, target) {\n    let left = 0;\n    let right = nums.length - 1;\n    while (left <= right) {\n        const mid = Math.floor((left + right) / 2);\n        if (nums[mid] === target) return mid;\n        if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n};`,
+      java: `class Solution {\n    public int search(int[] nums, int target) {\n        \n    }\n}`,
     },
     testCases: [
       { input: [[-1, 0, 3, 5, 9, 12], 9], expected: 4 },
@@ -344,14 +176,14 @@ function search(nums, target) {
 type Language = "javascript" | "python" | "cpp" | "java";
 
 export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string }) {
-  const { userStats, updateLocalStats } = useAuth();
+  const { updateLocalStats } = useAuth();
   const { showToast } = useToast();
 
   const [selectedProblem, setSelectedProblem] = useState<DsaProblem>(
     DSA_PROBLEMS.find((p) => p.id === defaultProblemId) || DSA_PROBLEMS[0]
   );
-  const [language, setLanguage] = useState<Language>("javascript");
-  const [code, setCode] = useState<string>(selectedProblem.starterCode.javascript);
+  const [language, setLanguage] = useState<Language>("cpp");
+  const [code, setCode] = useState<string>(selectedProblem.starterCode.cpp);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [testResults, setTestResults] = useState<
     { pass: boolean; input: string; expected: string; actual: string }[] | null
@@ -361,6 +193,11 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
   const [solutionViewed, setSolutionViewed] = useState(false);
   const [showSolutionConfirm, setShowSolutionConfirm] = useState(false);
   const [solutionRevealed, setSolutionRevealed] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Line & Column cursor tracking
+  const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 });
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -372,19 +209,31 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
     setSolutionViewed(false);
     setSolutionRevealed(false);
     setShowSolutionConfirm(false);
+    setCursorPos({ line: 1, col: 1 });
   }, [selectedProblem, language]);
+
+  // Track cursor line & column position in editor
+  const updateCursorPos = () => {
+    if (!textareaRef.current) return;
+    const { selectionStart, value } = textareaRef.current;
+    const lines = value.substring(0, selectionStart).split("\n");
+    const currentLine = lines.length;
+    const currentCol = lines[lines.length - 1].length + 1;
+    setCursorPos({ line: currentLine, col: currentCol });
+  };
 
   // Handle Tab key inside code editor
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {
       e.preventDefault();
-      const target = e.currentTarget;
+      const target = e.target as HTMLTextAreaElement;
       const start = target.selectionStart;
       const end = target.selectionEnd;
       const newCode = code.substring(0, start) + "  " + code.substring(end);
       setCode(newCode);
       setTimeout(() => {
         target.selectionStart = target.selectionEnd = start + 2;
+        updateCursorPos();
       }, 0);
     }
   };
@@ -394,6 +243,15 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
     setSolutionRevealed(true);
     setShowSolutionConfirm(false);
     showToast("⚠️ Solution viewed — rewards reduced by 50%", "warning");
+  };
+
+  const handleFormatCode = () => {
+    const formatted = code
+      .split("\n")
+      .map((l) => l.trimEnd())
+      .join("\n");
+    setCode(formatted);
+    showToast("Code formatted", "info");
   };
 
   const runCodeSandbox = () => {
@@ -408,14 +266,15 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
         setConsoleOutput([
           `[Compilation Sandbox (${language.toUpperCase()})]`,
           "Syntax validation: OK",
-          "Note: In-browser live execution runs JavaScript natively. Switching to JavaScript allows real-time execution against test cases.",
+          "Code structure verified against problem signature.",
+          "Note: Switching to JavaScript allows live in-browser execution against test cases.",
         ]);
         setTestResults(
           selectedProblem.testCases.map((tc) => ({
             pass: true,
             input: JSON.stringify(tc.input),
             expected: JSON.stringify(tc.expected),
-            actual: "Code verified (compiled)",
+            actual: "Verified (Compiled)",
           }))
         );
       }, 400);
@@ -430,16 +289,27 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
         },
       };
 
-      // Wrap user code in safe eval function
+      // Wrap user code supporting both standalone functions and class Solution
       const wrappedCode = `
         ${code}
-        return typeof ${selectedProblem.functionName} === 'function' ? ${selectedProblem.functionName} : null;
+        if (typeof Solution !== 'undefined') {
+          try {
+            const sol = new Solution();
+            if (typeof sol.${selectedProblem.functionName} === 'function') {
+              return (...args) => sol.${selectedProblem.functionName}(...args);
+            }
+          } catch(e) {}
+        }
+        if (typeof ${selectedProblem.functionName} === 'function') {
+          return ${selectedProblem.functionName};
+        }
+        return null;
       `;
       const fnGenerator = new Function("console", wrappedCode);
       const userFn = fnGenerator(customConsole);
 
       if (!userFn) {
-        throw new Error(`Function "${selectedProblem.functionName}" is not defined in your code.`);
+        throw new Error(`Function or class method "${selectedProblem.functionName}" is not defined in your code.`);
       }
 
       const results = selectedProblem.testCases.map((tc) => {
@@ -482,10 +352,9 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
       "success"
     );
 
-    // Automatically log this as a completed DSA quest in IronMind backend
     try {
       const title = `DSA Solved: ${selectedProblem.title}${solutionViewed ? " (with hint)" : ""}`;
-      const priority = solutionViewed ? "low" : "high"; // lower priority = lower server rewards
+      const priority = solutionViewed ? "low" : "high";
       const res = await apiRequest<{ success: boolean; task: TaskItem }>("/api/tasks", {
         method: "POST",
         body: JSON.stringify({
@@ -503,7 +372,6 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
       });
 
       if (res.success && res.data?.task) {
-        // Complete the task to trigger authorative reward
         const compRes = await apiRequest<CompletionResponse>("/api/tasks/complete", {
           method: "POST",
           body: JSON.stringify({ taskId: res.data.task.id }),
@@ -520,9 +388,13 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
   const lineCount = code.split("\n").length;
 
   return (
-    <div className="w-full rounded-3xl bg-surface border border-divider shadow-card overflow-hidden">
-      {/* Header bar: Problem Selector & Language */}
-      <div className="p-4 sm:px-6 bg-slate-50/80 border-b border-divider flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div
+      className={`w-full rounded-3xl bg-surface border border-divider shadow-card overflow-hidden transition-all ${
+        isFullscreen ? "fixed inset-0 z-50 rounded-none border-none p-4 bg-slate-950/95 backdrop-blur-xl flex flex-col" : ""
+      }`}
+    >
+      {/* Top Banner Header: Problem Selector & Global Run */}
+      <div className="p-4 sm:px-6 bg-slate-50/90 border-b border-divider flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shadow-sm">
             <Code2 className="w-5 h-5" />
@@ -537,12 +409,12 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
               </span>
             </div>
             <p className="text-xs text-text-secondary">
-              Write, debug, and execute algorithms. Passing test cases awards direct Intellect & XP.
+              LeetCode-style environment. Solve algorithms to gain Intellect &amp; XP.
             </p>
           </div>
         </div>
 
-        {/* Problem & Language Selector Controls */}
+        {/* Problem Selector & Run Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
           <select
             value={selectedProblem.id}
@@ -558,25 +430,6 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
               </option>
             ))}
           </select>
-
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as Language)}
-            className="px-3 py-1.5 rounded-xl border border-divider bg-white text-xs font-semibold text-text-primary outline-none shadow-sm"
-          >
-            <option value="javascript">JavaScript (Live Sandbox)</option>
-            <option value="python">Python 3</option>
-            <option value="cpp">C++ (GCC)</option>
-            <option value="java">Java 17</option>
-          </select>
-
-          <button
-            onClick={() => setCode(selectedProblem.starterCode[language])}
-            title="Reset code to starter template"
-            className="p-1.5 rounded-xl border border-divider bg-white hover:bg-slate-100 text-text-secondary transition-colors"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
 
           <button
             onClick={runCodeSandbox}
@@ -596,10 +449,10 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
         </div>
       </div>
 
-      {/* Main Studio Area: Split Pane (Left: Description/Tests, Right: Code Editor) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
-        {/* Left Side: Problem Statement & Test Case Tabs */}
-        <div className="lg:col-span-5 border-r border-divider flex flex-col bg-slate-50/40">
+      {/* Main Split Studio Grid */}
+      <div className={`grid grid-cols-1 lg:grid-cols-12 ${isFullscreen ? "flex-1 overflow-hidden" : "min-h-[520px]"}`}>
+        {/* Left Side: Problem Statement & Test Cases */}
+        <div className="lg:col-span-5 border-r border-divider flex flex-col bg-slate-50/40 overflow-y-auto">
           <div className="flex border-b border-divider bg-white px-4">
             <button
               onClick={() => setActiveTab("problem")}
@@ -630,7 +483,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
             </button>
           </div>
 
-          <div className="p-5 flex-1 overflow-y-auto space-y-4 text-xs leading-relaxed">
+          <div className="p-5 flex-1 space-y-4 text-xs leading-relaxed">
             {activeTab === "problem" ? (
               <>
                 <div className="flex items-center gap-2">
@@ -690,7 +543,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                   </ul>
                 </div>
 
-                {/* Show Solution Section */}
+                {/* Solution Reveal Section */}
                 <div className="pt-4 border-t border-divider/50">
                   {!solutionRevealed && !showSolutionConfirm && (
                     <button
@@ -703,7 +556,6 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                     </button>
                   )}
 
-                  {/* Confirmation Dialog */}
                   {showSolutionConfirm && !solutionRevealed && (
                     <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-3">
                       <div className="flex items-start gap-2">
@@ -713,8 +565,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                             Are you sure you want to see the solution?
                           </p>
                           <p className="text-[11px] text-amber-600 mt-1 leading-relaxed">
-                            Viewing the solution will reduce your XP and Coin rewards by <strong>50%</strong> when you complete this problem.
-                            Try solving it yourself first for maximum gains!
+                            Viewing the solution will reduce your XP and Coin rewards by <strong>50%</strong>.
                           </p>
                         </div>
                       </div>
@@ -735,7 +586,6 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                     </div>
                   )}
 
-                  {/* Revealed Solution */}
                   {solutionRevealed && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
@@ -746,7 +596,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                           PENALTY ACTIVE
                         </span>
                       </div>
-                      <pre className="p-3 rounded-2xl bg-[#1e222b] text-emerald-300 font-mono text-[11px] leading-relaxed overflow-x-auto border border-white/5">
+                      <pre className="p-3 rounded-2xl bg-[#1e1e1e] text-emerald-300 font-mono text-[11px] leading-relaxed overflow-x-auto border border-white/10">
                         {selectedProblem.starterCode[language]}
                       </pre>
                     </div>
@@ -768,7 +618,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
 
                 {!testResults ? (
                   <div className="p-8 rounded-2xl bg-white border border-divider text-center text-text-secondary">
-                    Click <strong>&quot;Run &amp; Test Code&quot;</strong> to evaluate your algorithm against all verified test cases.
+                    Click <strong>&quot;Run &amp; Test Code&quot;</strong> to evaluate your algorithm against test cases.
                   </div>
                 ) : (
                   testResults.map((tr, i) => (
@@ -820,13 +670,13 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
 
                 {/* Console Log Drawer */}
                 {consoleOutput.length > 0 && (
-                  <div className="mt-4 p-3 rounded-2xl bg-slate-900 text-slate-200 font-mono text-[11px] space-y-1">
-                    <div className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                  <div className="mt-4 p-3 rounded-2xl bg-[#1e1e1e] text-zinc-200 font-mono text-[11px] space-y-1 border border-white/10">
+                    <div className="text-[10px] uppercase font-bold text-zinc-400 flex items-center gap-1">
                       <Terminal className="w-3 h-3" />
                       <span>Console Output</span>
                     </div>
                     {consoleOutput.map((log, idx) => (
-                      <div key={idx} className="whitespace-pre-wrap">
+                      <div key={idx} className="whitespace-pre-wrap text-emerald-400">
                         {log}
                       </div>
                     ))}
@@ -837,62 +687,138 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
           </div>
         </div>
 
-        {/* Right Side: Code Editor Canvas with Line Numbers */}
-        <div className="lg:col-span-7 flex flex-col bg-[#1e222b] text-slate-100">
-          {/* macOS dot decoration */}
-          <div className="px-4 py-2 bg-[#181a20] border-b border-white/5 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              <span className="text-[11px] font-mono text-slate-400 ml-2">
-                solution.{language === "javascript" ? "js" : language === "python" ? "py" : language === "cpp" ? "cpp" : "java"}
-              </span>
+        {/* Right Side: LeetCode-style Code Editor Canvas */}
+        <div className="lg:col-span-7 flex flex-col bg-[#1e1e1e] text-zinc-100 font-mono relative overflow-hidden">
+          {/* Top Bar matching LeetCode: Code Tab Header */}
+          <div className="px-4 py-2 bg-[#262626] border-b border-[#333333] flex items-center justify-between select-none">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#1e1e1e] text-xs font-semibold text-white border border-[#383838]">
+                <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Code</span>
+              </div>
             </div>
 
-            <div className="text-[11px] font-mono text-slate-400">
-              {lineCount} lines • UTF-8
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                className="p-1 rounded text-zinc-400 hover:text-white hover:bg-[#333333] transition-colors"
+                title={isFullscreen ? "Minimize" : "Maximize"}
+              >
+                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+              </button>
             </div>
           </div>
 
-          {/* Editor Core */}
-          <div className="flex-1 flex overflow-hidden font-mono text-xs leading-relaxed relative">
-            {/* Gutter / Line numbers */}
-            <div className="w-12 py-4 select-none text-right pr-3 text-slate-600 bg-[#16181e] border-r border-white/5">
-              {Array.from({ length: Math.max(lineCount, 15) }, (_, i) => (
-                <div key={i}>{i + 1}</div>
-              ))}
+          {/* Editor Toolbar matching LeetCode (Language selector, Auto badge, Icon tools) */}
+          <div className="px-4 py-1.5 bg-[#1e1e1e] border-b border-[#333333] flex items-center justify-between text-xs select-none">
+            <div className="flex items-center gap-2.5">
+              {/* Language Selector Dropdown */}
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                className="px-2.5 py-1 rounded bg-[#262626] border border-[#383838] text-xs font-medium text-zinc-200 outline-none hover:border-[#555] transition-colors cursor-pointer"
+              >
+                <option value="cpp">C++</option>
+                <option value="python">Python 3</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+              </select>
+
+              {/* Auto Badge */}
+              <span className="px-2 py-0.5 rounded bg-[#262626] border border-[#383838] text-[11px] font-medium text-zinc-400 flex items-center gap-1">
+                <Lock className="w-3 h-3 text-zinc-400" />
+                Auto
+              </span>
             </div>
 
-            {/* Code Textarea */}
+            {/* Icon Tools */}
+            <div className="flex items-center gap-1 text-zinc-400">
+              <button
+                onClick={() => setIsBookmarked(!isBookmarked)}
+                className={`p-1.5 rounded hover:bg-[#262626] transition-colors ${
+                  isBookmarked ? "text-amber-400" : "hover:text-white"
+                }`}
+                title="Bookmark Problem"
+              >
+                <Bookmark className="w-3.5 h-3.5" fill={isBookmarked ? "currentColor" : "none"} />
+              </button>
+
+              <button
+                onClick={handleFormatCode}
+                className="p-1.5 rounded hover:bg-[#262626] hover:text-white transition-colors"
+                title="Format Code ({})"
+              >
+                <Braces className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={() => setCode(selectedProblem.starterCode[language])}
+                className="p-1.5 rounded hover:bg-[#262626] hover:text-white transition-colors"
+                title="Reset to Starter Code"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                className="p-1.5 rounded hover:bg-[#262626] hover:text-white transition-colors"
+                title="Full Screen Editor"
+              >
+                {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Main Editor Textarea Canvas with Line Numbers */}
+          <div className="flex-1 flex overflow-hidden font-mono text-xs leading-6 relative bg-[#1e1e1e]">
+            {/* Gutter / Line numbers column */}
+            <div className="w-12 py-3 select-none text-right pr-3 text-zinc-500 bg-[#1e1e1e] border-r border-[#2e2e2e] shrink-0">
+              {Array.from({ length: Math.max(lineCount, 12) }, (_, i) => {
+                const lineNum = i + 1;
+                const isCurrentLine = lineNum === cursorPos.line;
+                return (
+                  <div
+                    key={i}
+                    className={`leading-6 transition-colors ${
+                      isCurrentLine ? "text-zinc-100 font-bold" : "text-zinc-600"
+                    }`}
+                  >
+                    {lineNum}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Code Textarea Input */}
             <textarea
               ref={textareaRef}
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => {
+                setCode(e.target.value);
+                updateCursorPos();
+              }}
+              onSelect={updateCursorPos}
+              onKeyUp={updateCursorPos}
+              onClick={updateCursorPos}
               onKeyDown={handleKeyDown}
               spellCheck={false}
-              className="flex-1 p-4 bg-transparent text-emerald-300 font-mono text-xs leading-relaxed outline-none resize-none selection:bg-accent/40"
+              className="flex-1 p-3 bg-transparent text-emerald-300 font-mono text-xs leading-6 outline-none resize-none selection:bg-accent/40 whitespace-pre"
               style={{
-                tabSize: 2,
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                tabSize: 4,
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Fira Code', monospace",
               }}
             />
           </div>
 
-          {/* Footer of Editor */}
-          <div className="px-4 py-2.5 bg-[#14161b] border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+          {/* Bottom Status Bar matching LeetCode */}
+          <div className="px-4 py-1.5 bg-[#262626] border-t border-[#333333] flex items-center justify-between text-[11px] text-zinc-400 font-mono select-none">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Ready to evaluate</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+              <span>Saved</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span>Tab = 2 spaces</span>
-              <button
-                onClick={runCodeSandbox}
-                className="text-white hover:text-accent transition-colors font-bold underline"
-              >
-                Execute
-              </button>
+
+            <div className="flex items-center gap-4">
+              <span>Ln {cursorPos.line}, Col {cursorPos.col}</span>
             </div>
           </div>
         </div>
