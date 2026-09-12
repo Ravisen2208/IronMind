@@ -3,6 +3,9 @@
  * Server-side calculation of levels, XP, streaks, attributes, and rewards.
  */
 
+export type TaskType = "general" | "gym" | "study";
+export type TaskPriority = "low" | "medium" | "high";
+
 export interface ProgressionResult {
   previousLevel: number;
   newLevel: number;
@@ -33,7 +36,7 @@ export function getXpRequiredForLevel(level: number): number {
 
 /**
  * Computes authoritative level and XP progression.
- * Seamlessly handles single or multi-level advancements.
+ * Handles single or multi-level advancements.
  */
 export function calculateLevelProgression(
   currentLevel: number,
@@ -73,13 +76,7 @@ export function calculateLevelProgression(
 }
 
 /**
- * Calculates streak progression based on server-side calendar dates.
- *
- * Rules:
- * - No previous completion -> streak = 1
- * - Yesterday -> streak + 1
- * - Today -> streak unchanged
- * - Older than yesterday -> streak = 1
+ * Streak progression based on server-side calendar dates.
  */
 export function calculateStreak(
   currentStreak: number,
@@ -101,7 +98,6 @@ export function calculateStreak(
   }
 
   if (lastCompletedDate === today) {
-    // Already completed a task today, maintain current streak
     return {
       previousStreak: prevStreak,
       newStreak: prevStreak === 0 ? 1 : prevStreak,
@@ -111,7 +107,6 @@ export function calculateStreak(
   }
 
   if (lastCompletedDate === yesterday) {
-    // Consecutive day completion!
     return {
       previousStreak: prevStreak,
       newStreak: prevStreak + 1,
@@ -120,7 +115,6 @@ export function calculateStreak(
     };
   }
 
-  // Missed one or more days, reset streak to 1
   return {
     previousStreak: prevStreak,
     newStreak: 1,
@@ -130,20 +124,64 @@ export function calculateStreak(
 }
 
 /**
- * Server-authoritative quest reward defaults.
- * Clients cannot modify these amounts.
+ * Authoritative quest reward calculation based on priority and type.
  */
-export function getAuthoritativeRewards(category: "intellect" | "willpower") {
-  if (category === "willpower") {
-    return {
-      xpReward: 40,
-      coinReward: 20,
-    };
+export function getAuthoritativeRewards(
+  priority: TaskPriority = "medium",
+  type: TaskType = "general"
+): { xpReward: number; coinReward: number } {
+  let xpReward = 40;
+  let coinReward = 18;
+
+  if (priority === "low") {
+    xpReward = 25;
+    coinReward = 10;
+  } else if (priority === "high") {
+    xpReward = 60;
+    coinReward = 30;
   }
-  return {
-    xpReward: 35,
-    coinReward: 15,
-  };
+
+  // Bonus for dedicated sessions
+  if (type === "gym" || type === "study") {
+    xpReward += 10;
+    coinReward += 5;
+  }
+
+  return { xpReward, coinReward };
+}
+
+/**
+ * Determines which attribute is boosted on quest completion.
+ */
+export function getAttributeImpact(
+  type: TaskType,
+  category: string,
+  preferredAttribute?: "intellect" | "willpower"
+): "intellect" | "willpower" {
+  if (type === "study") return "intellect";
+  if (type === "gym") return "willpower";
+
+  const lowerCat = category.toLowerCase();
+  if (
+    lowerCat === "study" ||
+    lowerCat === "coding" ||
+    lowerCat === "reading" ||
+    lowerCat === "intellect"
+  ) {
+    return "intellect";
+  }
+
+  if (
+    lowerCat === "gym" ||
+    lowerCat === "fitness" ||
+    lowerCat === "health" ||
+    lowerCat === "mindfulness" ||
+    lowerCat === "willpower"
+  ) {
+    return "willpower";
+  }
+
+  return preferredAttribute || "willpower";
 }
 
 function formatDateOnly(d: Date): string {

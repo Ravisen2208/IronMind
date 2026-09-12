@@ -9,10 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#FBFBFD",
+        background: "#F5F5F7",
         surface: "#FFFFFF",
+        "surface-secondary": "#FBFBFD",
         "text-primary": "#1D1D1F",
         "text-secondary": "#6E6E73",
+        "text-muted": "#86868B",
         accent: {
           DEFAULT: "#0071E3",
           hover: "#0058B0",
@@ -22,13 +24,21 @@ const config: Config = {
           DEFAULT: "#34C759",
           light: "#EBF9EE",
         },
-        warm: {
+        warning: {
           DEFAULT: "#FF9F0A",
           hover: "#CC7E08",
           light: "#FFF5E5",
         },
+        danger: {
+          DEFAULT: "#FF3B30",
+          light: "#FEECEB",
+        },
         divider: "#D2D2D7",
         "divider-light": "#E5E5EA",
+        dark: {
+          bg: "#1D1D1F",
+          surface: "#2C2C2E",
+        },
       },
       fontFamily: {
         sans: [
@@ -42,13 +52,14 @@ const config: Config = {
         ],
       },
       borderRadius: {
-        "2xl": "1rem",
-        "3xl": "1.5rem",
-        "4xl": "2rem",
+        xl: "0.875rem", // 14px Apple inputs
+        "2xl": "1.25rem", // 20px
+        "3xl": "1.5rem", // 24px Apple cards
+        "4xl": "2rem", // 32px Apple large sections
       },
       boxShadow: {
         subtle: "0 2px 10px rgba(0, 0, 0, 0.03)",
-        card: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+        card: "0 2px 20px rgba(0, 0, 0, 0.04)",
         float: "0 20px 40px -15px rgba(0, 113, 227, 0.12)",
         glow: "0 0 25px rgba(0, 113, 227, 0.25)",
       },
@@ -58,7 +69,7 @@ const config: Config = {
       keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
+          "50%": { transform: "translateY(-6px)" },
         },
         "pulse-subtle": {
           "0%, 100%": { opacity: "1" },

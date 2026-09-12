@@ -3,10 +3,11 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/components/ui/Toast";
 import { Navbar } from "@/components/ui/Navbar";
+import { MobileBottomNav } from "@/components/ui/MobileBottomNav";
 import { AnimatedBackground } from "@/components/animations/AnimatedBackground";
 
 export const viewport: Viewport = {
-  themeColor: "#FBFBFD",
+  themeColor: "#F5F5F7",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -40,8 +41,9 @@ export default function RootLayout({
           <ToastProvider>
             <AnimatedBackground />
             <Navbar />
-            <main className="flex-1">{children}</main>
-            <footer className="py-8 text-center text-xs text-text-secondary border-t border-divider/60">
+            <main className="flex-1 pb-20 md:pb-8">{children}</main>
+            <MobileBottomNav />
+            <footer className="hidden md:block py-8 text-center text-xs text-text-secondary border-t border-divider/60">
               <div className="max-w-6xl mx-auto px-4">
                 <p className="font-medium">
                   IronMind &copy; {new Date().getFullYear()} — Train your mind. Complete your quests. Become stronger.

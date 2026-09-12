@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { TaskItem } from "@/lib/db";
+import { TaskItem } from "@/types";
 import { QuestCard } from "./QuestCard";
 import { EmptyState } from "../ui/EmptyState";
 import { CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";

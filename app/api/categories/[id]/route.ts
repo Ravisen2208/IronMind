@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
-import { deleteTask, updateTask } from "@/lib/db";
+import { deleteCustomCategory, updateCustomCategory } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
@@ -15,41 +15,34 @@ export async function PATCH(
       );
     }
 
-    const taskId = params.id;
-    if (!taskId) {
-      return NextResponse.json(
-        { error: "Quest ID is required." },
-        { status: 400 }
-      );
+    const categoryId = params.id;
+    if (categoryId.startsWith("cat_") && !categoryId.includes("_custom_")) {
+      // Default system categories cannot be modified
     }
 
     const body = await req.json().catch(() => ({}));
-    const updated = await updateTask(authUser.uid, taskId, {
-      title: body.title,
-      description: body.description,
-      category: body.category,
-      priority: body.priority,
-      dueDate: body.dueDate,
-      gym: body.gym,
-      study: body.study,
+    const updated = await updateCustomCategory(authUser.uid, categoryId, {
+      name: body.name,
+      icon: body.icon,
+      color: body.color,
     });
 
     if (!updated) {
       return NextResponse.json(
-        { error: "Quest not found or could not be updated." },
+        { error: "Category not found or default system category cannot be updated." },
         { status: 404 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      task: updated,
+      category: updated,
     });
   } catch (error: any) {
-    console.error("Error in PATCH /api/tasks/[id]:", error);
+    console.error("Error in PATCH /api/categories/[id]:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to update quest." },
-      { status: 400 }
+      { error: error.message || "Failed to update category." },
+      { status: 500 }
     );
   }
 }
@@ -67,30 +60,24 @@ export async function DELETE(
       );
     }
 
-    const taskId = params.id;
-    if (!taskId) {
-      return NextResponse.json(
-        { error: "Quest ID is required." },
-        { status: 400 }
-      );
-    }
+    const categoryId = params.id;
+    const success = await deleteCustomCategory(authUser.uid, categoryId);
 
-    const success = await deleteTask(authUser.uid, taskId);
     if (!success) {
       return NextResponse.json(
-        { error: "Quest not found or already deleted." },
+        { error: "Category not found or cannot be deleted." },
         { status: 404 }
       );
     }
 
     return NextResponse.json({
       success: true,
-      message: "Quest deleted successfully.",
+      message: "Category deleted successfully.",
     });
   } catch (error: any) {
-    console.error("Error in DELETE /api/tasks/[id]:", error);
+    console.error("Error in DELETE /api/categories/[id]:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to delete quest." },
+      { error: error.message || "Failed to delete category." },
       { status: 500 }
     );
   }

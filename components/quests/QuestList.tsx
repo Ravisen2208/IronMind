@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { TaskItem, CompletionResponse } from "@/lib/db";
+import { TaskItem, CompletionResponse } from "@/types";
 import { QuestCard } from "./QuestCard";
 import { EmptyState } from "../ui/EmptyState";
 import { Target, Brain, Dumbbell } from "lucide-react";

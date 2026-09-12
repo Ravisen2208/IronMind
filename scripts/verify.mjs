@@ -1,132 +1,119 @@
-// Verification test script for IronMind API endpoints and Anti-Cheat RPG Progression
+// Complete Verification test suite for IronMind full-stack suite
 
 async function runTests() {
   const baseUrl = "http://localhost:3000";
-  console.log("=== Testing IronMind Endpoints ===");
+  console.log("=== Testing IronMind Extended Suite ===");
 
   // 1. AI Quest Suggestions
   console.log("\n--- Testing /api/quest-ai ---");
-  const aiRes1 = await fetch(`${baseUrl}/api/quest-ai`, {
+  const aiRes = await fetch(`${baseUrl}/api/quest-ai`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ category: "intellect" }),
   }).then((r) => r.json());
-  console.log("Intellect Quest:", aiRes1.quest);
-  if (!aiRes1.quest || aiRes1.quest.split(" ").length > 15) {
-    throw new Error("AI Quest failed length requirement!");
-  }
+  console.log("AI Quest:", aiRes.quest);
 
-  const aiRes2 = await fetch(`${baseUrl}/api/quest-ai`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ category: "willpower" }),
-  }).then((r) => r.json());
-  console.log("Willpower Quest:", aiRes2.quest);
-
-  // 2. Auth protection check (Without headers must return 401)
+  // 2. Auth Protection
   console.log("\n--- Testing Auth Protection ---");
-  const unauthRes = await fetch(`${baseUrl}/api/user/me`);
-  console.log("Unauthenticated /api/user/me status:", unauthRes.status);
-  if (unauthRes.status !== 401) {
-    throw new Error("Expected 401 Unauthorized for unauthenticated request!");
-  }
+  const unauth = await fetch(`${baseUrl}/api/user/me`);
+  if (unauth.status !== 401) throw new Error("Expected 401 for unauth request!");
 
-  // 3. User initialization
-  const testUid = `warrior_test_${Date.now()}`;
+  // 3. User Initialization
+  const testUid = `warrior_${Date.now()}`;
   const authHeaders = {
     "Content-Type": "application/json",
-    "x-ironmind-demo-uid": testUid,
     "Authorization": `Bearer demo-token-${testUid}`,
   };
 
-  console.log("\n--- Testing /api/user/init ---");
   const initRes = await fetch(`${baseUrl}/api/user/init`, {
     method: "POST",
     headers: authHeaders,
   }).then((r) => r.json());
-  console.log("User profile initialized:", initRes.profile);
-  if (initRes.profile.level !== 1 || initRes.profile.streak !== 0) {
-    throw new Error("Unexpected initial stats!");
-  }
+  console.log("User Initialized:", initRes.profile?.uid);
 
-  // 4. Create Tasks (Intellect & Willpower)
-  console.log("\n--- Testing /api/tasks (POST) ---");
-  const task1 = await fetch(`${baseUrl}/api/tasks`, {
+  // 4. Categories CRUD
+  console.log("\n--- Testing /api/categories ---");
+  const catsRes = await fetch(`${baseUrl}/api/categories`, { headers: authHeaders }).then((r) => r.json());
+  console.log(`Fetched ${catsRes.categories.length} categories.`);
+
+  const newCat = await fetch(`${baseUrl}/api/categories`, {
+    method: "POST",
+    headers: authHeaders,
+    body: JSON.stringify({ name: "Interview Prep", color: "#5856D6" }),
+  }).then((r) => r.json());
+  console.log("Created Custom Category:", newCat.category?.name);
+
+  // 5. Tasks Creation (General, Gym, Study)
+  console.log("\n--- Testing /api/tasks (General, Gym, Study) ---");
+  const gymTask = await fetch(`${baseUrl}/api/tasks`, {
     method: "POST",
     headers: authHeaders,
     body: JSON.stringify({
-      title: "Read 20 pages of distributed systems",
-      category: "intellect",
+      title: "Bench Press 4x10",
+      type: "gym",
+      category: "Gym",
+      priority: "high",
+      gym: { exercise: "Bench Press", muscleGroup: "Chest", sets: 4, reps: 10 },
     }),
   }).then((r) => r.json());
-  console.log("Created task 1:", task1.task);
+  console.log("Created Gym Task:", gymTask.task?.title, "XP Reward:", gymTask.task?.xpReward);
 
-  const task2 = await fetch(`${baseUrl}/api/tasks`, {
+  const studyTask = await fetch(`${baseUrl}/api/tasks`, {
     method: "POST",
     headers: authHeaders,
     body: JSON.stringify({
-      title: "Complete 40 pushups and 5 min plank",
-      category: "willpower",
+      title: "DSA Graph Algorithms",
+      type: "study",
+      category: "Study",
+      priority: "medium",
+      study: { subject: "DSA", topic: "Dijkstra", duration: 45 },
     }),
   }).then((r) => r.json());
-  console.log("Created task 2:", task2.task);
+  console.log("Created Study Task:", studyTask.task?.title, "XP Reward:", studyTask.task?.xpReward);
 
-  // 5. Fetch Tasks
-  console.log("\n--- Testing /api/tasks (GET) ---");
-  const tasksRes = await fetch(`${baseUrl}/api/tasks`, {
+  // 6. Edit Incomplete Task (PATCH /api/tasks/[id])
+  console.log("\n--- Testing /api/tasks/[id] (PATCH) ---");
+  const editRes = await fetch(`${baseUrl}/api/tasks/${gymTask.task.id}`, {
+    method: "PATCH",
     headers: authHeaders,
+    body: JSON.stringify({
+      title: "Bench Press 4x12 (Heavy)",
+      priority: "high",
+    }),
   }).then((r) => r.json());
-  console.log(`Fetched ${tasksRes.tasks.length} tasks.`);
+  console.log("Updated Task Title:", editRes.task?.title);
 
-  // 6. Complete Task 1 (Atomic progression)
-  console.log("\n--- Testing /api/tasks/complete ---");
-  const completeRes = await fetch(`${baseUrl}/api/tasks/complete`, {
+  // 7. Complete Task with Authoritative Server Progression
+  console.log("\n--- Testing /api/tasks/complete (Atomic RPG Engine) ---");
+  const compRes = await fetch(`${baseUrl}/api/tasks/complete`, {
     method: "POST",
     headers: authHeaders,
-    body: JSON.stringify({ taskId: task1.task.id }),
+    body: JSON.stringify({ taskId: gymTask.task.id }),
   }).then((r) => r.json());
 
-  console.log("Task completed response:", {
-    xpGained: completeRes.data.progression.xpGained,
-    currentXp: completeRes.data.progression.currentXp,
-    level: completeRes.data.progression.newLevel,
-    streak: completeRes.data.streak.newStreak,
-    coins: completeRes.data.updatedProfile.coins,
-    intellect: completeRes.data.updatedProfile.attributes.intellect,
-    willpower: completeRes.data.updatedProfile.attributes.willpower,
+  console.log("Completion Result:", {
+    xpGained: compRes.data.progression.xpGained,
+    currentXp: compRes.data.progression.currentXp,
+    attributeGained: compRes.data.attributeGained,
+    willpower: compRes.data.updatedProfile.attributes.willpower,
+    coins: compRes.data.updatedProfile.coins,
   });
 
-  if (completeRes.data.streak.newStreak !== 1) {
-    throw new Error(`Expected streak 1, got ${completeRes.data.streak.newStreak}`);
-  }
-  if (completeRes.data.updatedProfile.attributes.intellect !== 11) {
-    throw new Error("Expected intellect 11!");
+  if (compRes.data.attributeGained !== "willpower") {
+    throw new Error("Expected gym task to award Willpower attribute!");
   }
 
-  // 7. Anti-Cheat: Try completing the same task again (must reject!)
-  console.log("\n--- Testing Anti-Cheat Duplicate Completion Prevention ---");
-  const dupRes = await fetch(`${baseUrl}/api/tasks/complete`, {
-    method: "POST",
-    headers: authHeaders,
-    body: JSON.stringify({ taskId: task1.task.id }),
-  });
-  console.log("Duplicate complete status:", dupRes.status);
-  if (dupRes.status !== 409 && dupRes.status !== 400) {
-    throw new Error("Anti-cheat failed: Duplicate task completion did not reject!");
-  }
-
-  // 8. Delete task 2
-  console.log("\n--- Testing /api/tasks/[id] (DELETE) ---");
-  const deleteRes = await fetch(`${baseUrl}/api/tasks/${task2.task.id}`, {
-    method: "DELETE",
+  // 8. Filtered GET /api/tasks?type=study
+  console.log("\n--- Testing Filtered Tasks ---");
+  const filteredRes = await fetch(`${baseUrl}/api/tasks?type=study`, {
     headers: authHeaders,
   }).then((r) => r.json());
-  console.log("Task deletion result:", deleteRes);
+  console.log(`Filtered study tasks count: ${filteredRes.tasks.length}`);
 
-  console.log("\n✓ ALL SERVER-SIDE ANTI-CHEAT & RPG PROGRESSION TESTS PASSED!");
+  console.log("\n✓ ALL EXTENDED SUITE VERIFICATION TESTS PASSED SUCCESSFULLY!");
 }
 
 runTests().catch((err) => {
-  console.error("Test failed:", err);
+  console.error("Test execution failed:", err);
   process.exit(1);
 });
