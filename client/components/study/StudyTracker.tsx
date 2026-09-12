@@ -9,8 +9,10 @@ import { LevelUpModal } from "@/components/animations/LevelUpModal";
 import { StudyEditorModal } from "@/components/study/StudyEditorModal";
 import { SevenDayStudyRoutine } from "@/components/study/SevenDayStudyRoutine";
 import { DsaCodeStudio } from "@/components/study/DsaCodeStudio";
+import { StudyAICoachModal } from "@/components/study/StudyAICoachModal";
 import { useToast } from "@/components/ui/Toast";
-import { StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
+import { CoolLoadingSpinner } from "@/components/ui/CoolLoadingAnimation";
+import { SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   GraduationCap,
@@ -82,6 +84,9 @@ export function StudyTracker() {
 
   // Edit Study Task State
   const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
+
+  // Gemini AI Study Architect Modal State
+  const [isAIStudyModalOpen, setIsAIStudyModalOpen] = useState(false);
 
   // Level Up Modal
   const [levelUpState, setLevelUpState] = useState<{ isOpen: boolean; newLevel: number }>({
@@ -299,12 +304,12 @@ export function StudyTracker() {
 
   return (
     <div className="space-y-6">
-      {/* 4-Stat Metric Strip */}
-      <StaggerContainer
+      {/* 4-Stat Metric Strip - Cascades smoothly from Left */}
+      <ScrollStaggerContainer
         staggerDelay={0.08}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center">
               <Brain className="w-5 h-5" />
@@ -322,7 +327,7 @@ export function StudyTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center">
               <Flame className="w-5 h-5 fill-success/20" />
@@ -340,7 +345,7 @@ export function StudyTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
               <Clock className="w-5 h-5" />
@@ -358,7 +363,7 @@ export function StudyTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5" />
@@ -375,10 +380,10 @@ export function StudyTracker() {
             <p className="text-[11px] text-text-secondary mt-1">Verified focus completions</p>
           </div>
         </motion.div>
-      </StaggerContainer>
+      </ScrollStaggerContainer>
 
       {/* Navigation Tabs & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2 rounded-2xl bg-surface border border-divider/70 shadow-subtle">
+      <SlideInLeft xOffset={-30} duration={0.4} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2 rounded-2xl bg-surface border border-divider/70 shadow-subtle">
         <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl">
           <button
             onClick={() => setActiveTab("active")}
@@ -434,7 +439,16 @@ export function StudyTracker() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <button
+            type="button"
+            onClick={() => setIsAIStudyModalOpen(true)}
+            className="text-xs font-bold px-4 py-2 rounded-full bg-gradient-to-r from-accent/20 to-warm-light border border-accent/40 text-accent hover:bg-accent/25 transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
+            <span>AI Study Architect</span>
+          </button>
+
           {activeTab === "presets" && (
             <button
               onClick={() => handleOpenPresetModal()}
@@ -453,7 +467,7 @@ export function StudyTracker() {
             <span>{isFormOpen ? "Close Form" : "Log Study Session"}</span>
           </button>
         </div>
-      </div>
+      </SlideInLeft>
 
       {/* Study Form Drawer */}
       <AnimatePresence>
@@ -582,30 +596,33 @@ export function StudyTracker() {
       {/* VIEW 1 & VIEW 3: Active Sessions & History */}
       {(activeTab === "active" || activeTab === "history") && (
         <div className="space-y-4">
-          {/* Quick DSA Callout Banner */}
+          {/* Quick DSA Callout Banner - Slides in from Left */}
           {activeTab === "active" && (
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-blue-50/60 to-surface border border-indigo-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-subtle">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <SlideInLeft xOffset={-40} duration={0.45} className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-indigo-900/10 via-indigo-800/5 to-surface dark:from-indigo-950/80 dark:via-purple-950/50 dark:to-surface border border-indigo-200 dark:border-indigo-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-subtle">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-2xl bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center shrink-0 shadow-md">
                   <Code2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-text-primary">
-                    Practicing Algorithms &amp; Data Structures?
+                  <h4 className="text-sm font-bold text-text-primary dark:text-white tracking-tight flex items-center gap-2">
+                    <span>Practicing Algorithms &amp; Data Structures?</span>
+                    <span className="text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/70 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/60">
+                      Live IDE
+                    </span>
                   </h4>
-                  <p className="text-[11px] text-text-secondary">
+                  <p className="text-xs text-text-secondary dark:text-slate-300 mt-0.5">
                     Write, test, and execute live code against automated test cases in the built-in DSA Code Studio.
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setActiveTab("dsa")}
-                className="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 shrink-0"
+                className="px-5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/30 transition-all active:scale-95 flex items-center justify-center gap-2 shrink-0 tracking-wide uppercase"
               >
                 <span>Launch Code Editor</span>
                 <Code2 className="w-3.5 h-3.5" />
               </button>
-            </div>
+            </SlideInLeft>
           )}
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -639,7 +656,9 @@ export function StudyTracker() {
 
           <div className="space-y-3">
             {loading ? (
-              <div className="h-28 rounded-3xl bg-slate-200 animate-pulse" />
+              <div className="py-12 rounded-3xl bg-surface/90 border border-divider/70 shadow-subtle flex items-center justify-center">
+                <CoolLoadingSpinner size="md" text="Loading Study & Focus Directives..." />
+              </div>
             ) : displayedQuests.length === 0 ? (
               <div className="p-10 rounded-3xl bg-surface border border-divider/60 text-center space-y-2">
                 <BookOpen className="w-8 h-8 text-text-secondary/40 mx-auto" />
@@ -691,7 +710,7 @@ export function StudyTracker() {
       {/* VIEW 2: Subjects & Presets Library */}
       {activeTab === "presets" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <SlideInLeft xOffset={-30} duration={0.4} className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-text-primary tracking-tight">
                 Subject Directives & Topics Library
@@ -707,12 +726,16 @@ export function StudyTracker() {
               <Plus className="w-3.5 h-3.5" />
               <span>Create Subject Directive</span>
             </button>
-          </div>
+          </SlideInLeft>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <ScrollStaggerContainer
+            staggerDelay={0.07}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
             {presets.map((p) => (
-              <div
+              <motion.div
                 key={p.id}
+                variants={staggerItemLeft}
                 className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle hover:shadow-card transition-all flex flex-col justify-between gap-4"
               >
                 <div>
@@ -766,9 +789,9 @@ export function StudyTracker() {
                   <Play className="w-3 h-3 fill-current" />
                   <span>Start Focus Session</span>
                 </button>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </ScrollStaggerContainer>
         </div>
       )}
 
@@ -862,6 +885,16 @@ export function StudyTracker() {
         task={editingTask}
         onClose={() => setEditingTask(null)}
         onStudyUpdated={handleStudyUpdated}
+      />
+
+      {/* Gemini AI Study Architect Modal */}
+      <StudyAICoachModal
+        isOpen={isAIStudyModalOpen}
+        onClose={() => setIsAIStudyModalOpen(false)}
+        onAddTask={(newTask) => {
+          setStudyTasks((prev) => [newTask, ...prev]);
+          setActiveTab("active");
+        }}
       />
 
       {/* Level Up Modal */}

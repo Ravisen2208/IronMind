@@ -20,22 +20,35 @@ export function AISuggestButton({
   const handleGenerate = async () => {
     setLoading(true);
     try {
-      const res = await apiRequest<{ success: boolean; quest: string }>(
-        "/api/quest-ai",
-        {
-          method: "POST",
-          body: JSON.stringify({ category }),
-        }
-      );
+      const res = await apiRequest<{
+        success: boolean;
+        suggestion?: {
+          title: string;
+          type?: string;
+          category?: string;
+          priority?: string;
+        };
+        quest?: string;
+        source?: string;
+      }>("/api/quest-ai", {
+        method: "POST",
+        body: JSON.stringify({ category }),
+      });
 
-      if (res.success && res.data?.quest) {
-        onSelectSuggestion(res.data.quest);
-        showToast("Gemini AI generated a customized quest!", "success");
+      const generatedTitle = res.data?.suggestion?.title || res.data?.quest;
+
+      if (res.success && generatedTitle) {
+        onSelectSuggestion(generatedTitle);
+        if (res.data?.source === "gemini-ai") {
+          showToast("Gemini AI generated a customized quest!", "success");
+        } else {
+          showToast("Quest suggestion applied (fallback template).", "info");
+        }
       } else {
-        showToast("Using offline quest template.", "info");
+        showToast(res.error || "Unable to generate quest suggestion.", "error");
       }
     } catch {
-      showToast("Unable to reach AI service; applied default quest.", "info");
+      showToast("Unable to reach AI service; please try again.", "error");
     } finally {
       setLoading(false);
     }

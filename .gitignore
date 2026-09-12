@@ -1,39 +1,48 @@
-# dependencies
+# Dependencies
 node_modules/
 .pnp
 .pnp.js
 .yarn/cache
 
-# testing
-coverage/
-
-# next.js & build outputs
+# Build outputs
 .next/
 out/
 dist/
 build/
+*.tsbuildinfo
 
-# misc
-.DS_Store
+# Sensitive Environment Variables (Never commit to GitHub)
+.env
+.env.*
+!.env.example
+*.env
+**/.env
+**/.env.*
+!**/.env.example
+client/.env
+client/.env.local
+client/.env.*
+!client/.env.example
+server/.env
+server/.env.*
+!server/.env.example
+
+# Service Accounts & Security Keys
+*service-account*.json
+*firebase-admin*.json
+*firebase-adminsdk*.json
 *.pem
+*.key
+*.cert
+*.crt
 
-# debug
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env
-.env*.local
-.env.development
-.env.production
-.env.test
-service-account*.json
-firebase-admin*.json
-*.key
-
-# vercel
+# Vercel
 .vercel
-
-# typescript
-*.tsbuildinfo

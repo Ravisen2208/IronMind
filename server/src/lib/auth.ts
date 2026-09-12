@@ -14,22 +14,31 @@ export interface AuthenticatedRequest extends Request {
 export async function verifyAuthToken(req: Request): Promise<AuthenticatedUser | null> {
   const authHeader = (req.headers["authorization"] || req.headers["Authorization"]) as string | undefined;
 
-  if (!isFirebaseAdminConfigured()) {
-    let demoUid: string | null = null;
-    if (authHeader && authHeader.startsWith("Bearer demo-token-")) {
-      demoUid = authHeader.replace("Bearer demo-token-", "").trim();
-    } else {
-      demoUid = (req.headers["x-ironmind-demo-uid"] as string) || null;
-    }
+  // Check for guest/demo session token first
+  if (authHeader && authHeader.startsWith("Bearer demo-token-")) {
+    const demoUid = authHeader.replace("Bearer demo-token-", "").trim() || "warrior_hero";
+    return {
+      uid: demoUid,
+      email: `${demoUid}@ironmind.app`,
+      name: "IronMind Warrior",
+    };
+  }
 
-    if (demoUid) {
-      return {
-        uid: demoUid,
-        email: `${demoUid}@ironmind.app`,
-        name: "IronMind Warrior",
-      };
-    }
-    return null;
+  const demoHeaderUid = (req.headers["x-ironmind-demo-uid"] as string) || null;
+  if (demoHeaderUid) {
+    return {
+      uid: demoHeaderUid,
+      email: `${demoHeaderUid}@ironmind.app`,
+      name: "IronMind Warrior",
+    };
+  }
+
+  if (!isFirebaseAdminConfigured()) {
+    return {
+      uid: "warrior_hero",
+      email: "warrior_hero@ironmind.app",
+      name: "IronMind Warrior",
+    };
   }
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

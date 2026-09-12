@@ -2,7 +2,11 @@ import * as admin from "firebase-admin";
 
 function formatPrivateKey(key: string | undefined): string | undefined {
   if (!key) return undefined;
-  return key.replace(/\\n/g, "\n");
+  let formatted = key.trim();
+  if ((formatted.startsWith('"') && formatted.endsWith('"')) || (formatted.startsWith("'") && formatted.endsWith("'"))) {
+    formatted = formatted.slice(1, -1);
+  }
+  return formatted.replace(/\\n/g, "\n");
 }
 
 export function isFirebaseAdminConfigured(): boolean {
@@ -23,13 +27,18 @@ export function initFirebaseAdmin(): admin.app.App {
   const privateKey = formatPrivateKey(process.env.FIREBASE_ADMIN_PRIVATE_KEY);
 
   if (projectId && clientEmail && privateKey) {
-    return admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
-    });
+    try {
+      return admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey,
+        }),
+      });
+    } catch (err: any) {
+      console.warn("⚠️ Firebase Admin cert error:", err?.message || err);
+      console.warn("ℹ️ IronMind server will proceed in resilient mode.");
+    }
   }
 
   if (projectId) {

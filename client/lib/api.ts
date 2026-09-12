@@ -8,12 +8,16 @@ async function getAuthToken(): Promise<string | null> {
   if (!currentUser) {
     // Check if running in guest/demo mode
     if (typeof window !== "undefined") {
-      const demoUid = localStorage.getItem("ironmind_demo_uid");
-      if (demoUid) {
-        return `demo-token-${demoUid}`;
+      let demoUid = localStorage.getItem("ironmind_demo_uid");
+      if (!demoUid) {
+        demoUid = "warrior_hero";
+        try {
+          localStorage.setItem("ironmind_demo_uid", demoUid);
+        } catch {}
       }
+      return `demo-token-${demoUid}`;
     }
-    return null;
+    return "demo-token-warrior_hero";
   }
   return currentUser.getIdToken();
 }

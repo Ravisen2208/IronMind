@@ -8,8 +8,10 @@ import { QuestCard } from "@/components/quests/QuestCard";
 import { LevelUpModal } from "@/components/animations/LevelUpModal";
 import { GymEditorModal } from "@/components/gym/GymEditorModal";
 import { SevenDayGymRoutine } from "@/components/gym/SevenDayGymRoutine";
+import { GymAICoachModal } from "@/components/gym/GymAICoachModal";
 import { useToast } from "@/components/ui/Toast";
-import { StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
+import { CoolLoadingSpinner } from "@/components/ui/CoolLoadingAnimation";
+import { SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Dumbbell,
@@ -26,6 +28,7 @@ import {
   Trash2,
   Edit3,
   Play,
+  Sparkles,
 } from "lucide-react";
 
 export interface WorkoutPreset {
@@ -84,6 +87,9 @@ export function GymTracker() {
 
   // Edit Workout Task State
   const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
+
+  // Gemini AI Coach Modal State
+  const [isAICoachModalOpen, setIsAICoachModalOpen] = useState(false);
 
   // Level Up Modal
   const [levelUpState, setLevelUpState] = useState<{ isOpen: boolean; newLevel: number }>({
@@ -311,12 +317,12 @@ export function GymTracker() {
 
   return (
     <div className="space-y-6">
-      {/* 4-Stat Metric Strip */}
-      <StaggerContainer
+      {/* 4-Stat Metric Strip - Cascades smoothly from Left */}
+      <ScrollStaggerContainer
         staggerDelay={0.08}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-orange-50 text-warm flex items-center justify-center">
               <Dumbbell className="w-5 h-5" />
@@ -334,7 +340,7 @@ export function GymTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center">
               <Flame className="w-5 h-5 fill-success/20" />
@@ -352,7 +358,7 @@ export function GymTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5" />
@@ -370,7 +376,7 @@ export function GymTracker() {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="flex items-center justify-between">
             <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
               <Zap className="w-5 h-5" />
@@ -387,10 +393,10 @@ export function GymTracker() {
             <p className="text-[11px] text-text-secondary mt-1">Ready for execution</p>
           </div>
         </motion.div>
-      </StaggerContainer>
+      </ScrollStaggerContainer>
 
       {/* Main Controls: Navigation Tabs & Action Buttons */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2 rounded-2xl bg-surface border border-divider/70 shadow-subtle">
+      <SlideInLeft xOffset={-30} duration={0.4} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-2 rounded-2xl bg-surface border border-divider/70 shadow-subtle">
         <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl">
           <button
             onClick={() => setActiveTab("active")}
@@ -435,7 +441,16 @@ export function GymTracker() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <button
+            type="button"
+            onClick={() => setIsAICoachModalOpen(true)}
+            className="text-xs font-bold px-4 py-2 rounded-full bg-gradient-to-r from-accent/20 to-warm-light border border-accent/40 text-accent hover:bg-accent/25 transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-accent animate-pulse" />
+            <span>AI Workout Coach</span>
+          </button>
+
           {activeTab === "presets" && (
             <button
               onClick={() => handleOpenPresetModal()}
@@ -454,7 +469,7 @@ export function GymTracker() {
             <span>{isFormOpen ? "Close Form" : "Log New Workout"}</span>
           </button>
         </div>
-      </div>
+      </SlideInLeft>
 
       {/* Workout Form Drawer */}
       <AnimatePresence>
@@ -626,7 +641,9 @@ export function GymTracker() {
           {/* List */}
           <div className="space-y-3">
             {loading ? (
-              <div className="h-28 rounded-3xl bg-slate-200 animate-pulse" />
+              <div className="py-12 rounded-3xl bg-surface/90 border border-divider/70 shadow-subtle flex items-center justify-center">
+                <CoolLoadingSpinner size="md" text="Loading Gym Directives & Workouts..." />
+              </div>
             ) : displayedWorkouts.length === 0 ? (
               <div className="p-10 rounded-3xl bg-surface border border-divider/60 text-center space-y-2">
                 <Dumbbell className="w-8 h-8 text-text-secondary/40 mx-auto" />
@@ -667,7 +684,7 @@ export function GymTracker() {
       {/* VIEW 2: Routines & Presets Manager */}
       {activeTab === "presets" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <SlideInLeft xOffset={-30} duration={0.4} className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-text-primary tracking-tight">
                 Workout Routines & Exercise Library
@@ -683,12 +700,16 @@ export function GymTracker() {
               <Plus className="w-3.5 h-3.5" />
               <span>Create Exercise Routine</span>
             </button>
-          </div>
+          </SlideInLeft>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <ScrollStaggerContainer
+            staggerDelay={0.07}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
             {presets.map((p) => (
-              <div
+              <motion.div
                 key={p.id}
+                variants={staggerItemLeft}
                 className="p-5 rounded-3xl bg-surface border border-divider/70 shadow-subtle hover:shadow-card transition-all flex flex-col justify-between gap-4"
               >
                 <div>
@@ -742,9 +763,9 @@ export function GymTracker() {
                   <Play className="w-3 h-3 fill-current" />
                   <span>Start Workout Quest</span>
                 </button>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </ScrollStaggerContainer>
         </div>
       )}
 
@@ -860,6 +881,16 @@ export function GymTracker() {
         task={editingTask}
         onClose={() => setEditingTask(null)}
         onWorkoutUpdated={handleWorkoutUpdated}
+      />
+
+      {/* Gemini AI Coach Modal */}
+      <GymAICoachModal
+        isOpen={isAICoachModalOpen}
+        onClose={() => setIsAICoachModalOpen(false)}
+        onAddTasks={(newTasks) => {
+          setGymTasks((prev) => [...newTasks, ...prev]);
+          setActiveTab("active");
+        }}
       />
 
       {/* Level Up Modal */}

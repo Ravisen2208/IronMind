@@ -3,7 +3,7 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import { TaskItem } from "@/types";
-import { StaggerContainer, staggerItem, appleEasing } from "../animations/MotionWrapper";
+import { SlideInLeft, ScrollStaggerContainer, staggerItemLeft, appleEasing } from "../animations/MotionWrapper";
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -52,12 +52,12 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
 
   return (
     <div className="space-y-8">
-      {/* Lifetime Metrics 8-Card Grid */}
-      <StaggerContainer
+      {/* Lifetime Metrics 8-Card Grid - Staggers in from Left */}
+      <ScrollStaggerContainer
         staggerDelay={0.05}
         className="grid grid-cols-2 sm:grid-cols-4 gap-3.5"
       >
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-accent-light text-accent flex items-center justify-center mb-2">
             <Sparkles className="w-4 h-4" />
           </div>
@@ -70,7 +70,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-success-light text-success flex items-center justify-center mb-2">
             <Flame className="w-4 h-4 fill-success/20" />
           </div>
@@ -83,7 +83,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
             <Award className="w-4 h-4" />
           </div>
@@ -96,7 +96,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-warm-light text-warm flex items-center justify-center mb-2">
             <Coins className="w-4 h-4 fill-warm/20" />
           </div>
@@ -109,7 +109,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-2">
             <CheckCircle2 className="w-4 h-4" />
           </div>
@@ -122,7 +122,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-2">
             <Clock className="w-4 h-4" />
           </div>
@@ -135,7 +135,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-2">
             <Dumbbell className="w-4 h-4" />
           </div>
@@ -148,7 +148,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
+        <motion.div variants={staggerItemLeft} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle">
           <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-2">
             <Brain className="w-4 h-4" />
           </div>
@@ -160,10 +160,10 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
             INT {userStats?.attributes?.intellect ?? 10} / WIL {userStats?.attributes?.willpower ?? 10}
           </div>
         </motion.div>
-      </StaggerContainer>
+      </ScrollStaggerContainer>
 
-      {/* Apple-Style Minimalist Weekly Progress Chart */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-surface border border-divider/70 shadow-subtle space-y-6">
+      {/* Apple-Style Minimalist Weekly Progress Chart - Slides in from Left */}
+      <SlideInLeft xOffset={-40} duration={0.45} className="p-6 sm:p-8 rounded-3xl bg-surface border border-divider/70 shadow-subtle space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ export function ProgressCharts({ tasks }: ProgressChartsProps) {
           <span>Weekly target: 20 completed quests</span>
           <span>Updated continuously</span>
         </div>
-      </div>
+      </SlideInLeft>
     </div>
   );
 }

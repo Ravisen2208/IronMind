@@ -12,7 +12,9 @@ import { CategoryModal } from "@/components/quests/CategoryModal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { LevelUpModal } from "@/components/animations/LevelUpModal";
 import { useToast } from "@/components/ui/Toast";
-import { FadeIn, StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
+import { CoolLoadingSpinner } from "@/components/ui/CoolLoadingAnimation";
+import { Skeleton } from "@/components/ui/LoadingSkeleton";
+import { FadeIn, SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Target,
@@ -129,7 +131,7 @@ export default function MyQuestsPage() {
       {/* Header */}
       <FadeIn yOffset={10} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight text-text-primary">
             My Quests
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
@@ -168,8 +170,8 @@ export default function MyQuestsPage() {
         )}
       </AnimatePresence>
 
-      {/* Search & Filter Bar */}
-      <div className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle space-y-3">
+      {/* Search & Filter Bar - Slides in from Left */}
+      <SlideInLeft xOffset={-35} duration={0.4} className="p-4 rounded-3xl bg-surface border border-divider/70 shadow-subtle space-y-3">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -250,14 +252,16 @@ export default function MyQuestsPage() {
             Showing {filteredTasks.length} quests
           </span>
         </div>
-      </div>
+      </SlideInLeft>
 
       {/* Quests List */}
       {tasksLoading ? (
-        <div className="space-y-3">
-          <div className="h-20 rounded-3xl bg-slate-200 animate-pulse" />
-          <div className="h-20 rounded-3xl bg-slate-200 animate-pulse" />
-          <div className="h-20 rounded-3xl bg-slate-200 animate-pulse" />
+        <div className="space-y-4">
+          <div className="py-12 rounded-3xl bg-surface/90 border border-divider/70 shadow-subtle flex items-center justify-center">
+            <CoolLoadingSpinner size="md" text="Loading RPG Quests & Directives..." />
+          </div>
+          <Skeleton className="h-24 rounded-3xl" />
+          <Skeleton className="h-24 rounded-3xl" />
         </div>
       ) : filteredTasks.length === 0 ? (
         <EmptyState

@@ -1,13 +1,18 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+
+// Load environment variables from current dir and root dir
+dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 
 import userRouter from "./routes/user";
 import tasksRouter from "./routes/tasks";
 import categoriesRouter from "./routes/categories";
 import questAiRouter from "./routes/questAi";
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

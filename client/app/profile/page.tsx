@@ -60,7 +60,7 @@ export default function ProfilePage() {
     <div className="w-full px-4 sm:px-8 lg:px-12 py-8 space-y-6">
       <FadeIn yOffset={10}>
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight text-text-primary">
             Profile & Settings
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">

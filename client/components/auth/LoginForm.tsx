@@ -42,7 +42,7 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md mx-auto p-8 rounded-3xl bg-surface border border-divider/70 shadow-card">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-serif text-text-primary tracking-tight">
+        <h2 className="text-2xl font-heading font-bold text-text-primary tracking-tight">
           Welcome back to IronMind
         </h2>
         <p className="text-xs sm:text-sm text-text-secondary mt-1">

@@ -45,7 +45,7 @@ export function CharacterCard({ stats, isLeveledUp = false }: CharacterCardProps
 
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-xl sm:text-2xl font-serif text-text-primary tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-heading font-bold text-text-primary tracking-tight">
                 {stats.email ? stats.email.split("@")[0] : "IronMind Warrior"}
               </h2>
               <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-success-light text-success text-xs font-semibold border border-success/20">

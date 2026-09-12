@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FloatingStats } from "../animations/FloatingStats";
 import { LoginForm } from "../auth/LoginForm";
-import { FadeIn, StaggerContainer, staggerItem } from "../animations/MotionWrapper";
+import { FadeIn, SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "../animations/MotionWrapper";
 import { Shield, Sparkles, CheckCircle2, Zap, ArrowRight } from "lucide-react";
 import { MagneticButton } from "../ui/MagneticButton";
 import { HoverCardEffect } from "../ui/HoverCardEffect";
@@ -34,10 +34,10 @@ export function HeroSection() {
         {/* Hero Title & Pitch */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <FadeIn delay={0.2} yOffset={20}>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif tracking-tight text-text-primary leading-[1.08]">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight text-text-primary leading-[1.05]">
               Train your mind.
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-bronze via-warm-dark to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-bronze via-amber-500 to-accent">
                 Complete your quests.
               </span>
               <br />
@@ -46,7 +46,7 @@ export function HeroSection() {
           </FadeIn>
 
           <FadeIn delay={0.35} yOffset={15}>
-            <p className="text-base sm:text-xl text-text-secondary max-w-2xl mx-auto font-normal leading-relaxed">
+            <p className="text-base sm:text-lg text-text-secondary max-w-2xl mx-auto font-normal leading-relaxed">
               IronMind turns daily habits and cognitive discipline into an authoritative RPG progression system.
               Earn XP, build streaks, accumulate coins, and level up your character attributes.
             </p>
@@ -57,7 +57,7 @@ export function HeroSection() {
             <MagneticButton dataCursorText="Start">
               <Link
                 href="/signup"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-md transition-all duration-200 active:scale-95"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-md transition-all duration-200 active:scale-95 font-heading"
               >
                 <span>Begin Your Progression</span>
                 <ArrowRight className="w-4 h-4" />
@@ -70,7 +70,7 @@ export function HeroSection() {
                   const el = document.getElementById("auth-experience");
                   el?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-surface hover:bg-warm-light text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-surface hover:bg-warm-light text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95 font-heading"
               >
                 <span>Sign In to Character</span>
               </button>
@@ -79,7 +79,7 @@ export function HeroSection() {
         </div>
 
         {/* Hero Image with 3D Tilt Spotlight */}
-        <FadeIn delay={0.6} yOffset={30} className="mt-12 sm:mt-16">
+        <SlideInLeft delay={0.2} xOffset={-60} className="mt-12 sm:mt-16">
           <HoverCardEffect className="max-w-4xl mx-auto rounded-4xl shadow-warm border border-divider/50">
             <div className="relative overflow-hidden rounded-4xl group">
               <Image
@@ -93,15 +93,15 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
             </div>
           </HoverCardEffect>
-        </FadeIn>
+        </SlideInLeft>
 
         {/* Coordinated Floating Graphic Area */}
-        <div className="mt-12 sm:mt-16">
+        <SlideInLeft delay={0.15} xOffset={-50} className="mt-12 sm:mt-16">
           <FloatingStats />
-        </div>
+        </SlideInLeft>
 
         {/* Feature Cards with 3D Tilt Spotlight */}
-        <FadeIn delay={0.3} yOffset={20} className="mt-8">
+        <SlideInLeft delay={0.2} xOffset={-60} className="mt-8">
           <HoverCardEffect className="max-w-3xl mx-auto rounded-4xl shadow-warm border border-divider/50">
             <div className="relative overflow-hidden rounded-4xl group">
               <Image
@@ -113,19 +113,19 @@ export function HeroSection() {
               />
             </div>
           </HoverCardEffect>
-        </FadeIn>
+        </SlideInLeft>
 
-        {/* Feature Stagger Highlights with Hover Cards */}
-        <StaggerContainer
+        {/* Feature Stagger Highlights with Hover Cards - Cascades smoothly from Left on Scroll */}
+        <ScrollStaggerContainer
           staggerDelay={0.12}
           className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
         >
-          <motion.div variants={staggerItem}>
+          <motion.div variants={staggerItemLeft}>
             <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
               <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center mb-3">
                 <Zap className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-serif text-text-primary tracking-tight">
+              <h3 className="text-base font-heading font-bold text-text-primary tracking-tight">
                 Anti-Cheat Progression
               </h3>
               <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
@@ -134,12 +134,12 @@ export function HeroSection() {
             </HoverCardEffect>
           </motion.div>
 
-          <motion.div variants={staggerItem}>
+          <motion.div variants={staggerItemLeft}>
             <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
               <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center mb-3">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-serif text-text-primary tracking-tight">
+              <h3 className="text-base font-heading font-bold text-text-primary tracking-tight">
                 Premium Aesthetics
               </h3>
               <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
@@ -148,12 +148,12 @@ export function HeroSection() {
             </HoverCardEffect>
           </motion.div>
 
-          <motion.div variants={staggerItem}>
+          <motion.div variants={staggerItemLeft}>
             <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
               <div className="w-10 h-10 rounded-2xl bg-warning-light text-warning flex items-center justify-center mb-3">
                 <Sparkles className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-serif text-text-primary tracking-tight">
+              <h3 className="text-base font-heading font-bold text-text-primary tracking-tight">
                 Gemini AI Directives
               </h3>
               <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
@@ -161,12 +161,12 @@ export function HeroSection() {
               </p>
             </HoverCardEffect>
           </motion.div>
-        </StaggerContainer>
+        </ScrollStaggerContainer>
 
-        {/* In-Page Auth Portal */}
-        <div id="auth-experience" className="mt-20 pt-10 border-t border-divider/60">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight">
+        {/* In-Page Auth Portal - Slides in from Left */}
+        <SlideInLeft delay={0.1} xOffset={-50} className="mt-20 pt-10 border-t border-divider/60">
+          <div id="auth-experience" className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary tracking-tight">
               Ready to embark?
             </h2>
             <p className="text-sm text-text-secondary mt-1 font-sans">
@@ -174,7 +174,7 @@ export function HeroSection() {
             </p>
           </div>
           <LoginForm />
-        </div>
+        </SlideInLeft>
       </div>
     </div>
   );

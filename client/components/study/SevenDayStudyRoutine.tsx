@@ -18,6 +18,7 @@ import {
 import { useToast } from "@/components/ui/Toast";
 import { apiRequest } from "@/lib/api";
 import { TaskItem } from "@/types";
+import { SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface DayStudyPlan {
@@ -217,8 +218,8 @@ export function SevenDayStudyRoutine({
 
   return (
     <div className="space-y-6">
-      {/* 7-Day Day Selector Bar */}
-      <div className="p-3 rounded-2xl bg-surface border border-divider shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* 7-Day Day Selector Bar - Slides in from Left */}
+      <SlideInLeft xOffset={-35} duration={0.4} className="p-3 rounded-2xl bg-surface border border-divider shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-blue-50 text-accent flex items-center justify-center font-bold">
             <Calendar className="w-5 h-5" />
@@ -234,7 +235,7 @@ export function SevenDayStudyRoutine({
         </div>
 
         {/* 7 Days Button Row */}
-        <div className="grid grid-cols-7 gap-1.5 p-1 bg-slate-100/80 rounded-xl overflow-x-auto">
+        <div className="grid grid-cols-7 gap-1.5 p-1 bg-surface-secondary border border-divider/60 rounded-xl overflow-x-auto">
           {routines.map((r) => {
             const isToday = r.dayNumber === currentDayNum;
             const isSelected = r.dayNumber === selectedDay;
@@ -244,10 +245,10 @@ export function SevenDayStudyRoutine({
                 onClick={() => setSelectedDay(r.dayNumber)}
                 className={`py-2 px-2.5 rounded-lg text-center transition-all ${
                   isSelected
-                    ? "bg-accent text-cream font-bold shadow-sm scale-102"
+                    ? "bg-accent text-cream dark:text-dark-bg font-bold shadow-sm scale-102"
                     : isToday
-                    ? "bg-blue-100 text-accent font-bold border border-accent/30"
-                    : "text-text-secondary hover:text-text-primary hover:bg-white"
+                    ? "bg-amber-500/15 text-accent dark:text-amber-300 font-bold border border-accent/30 dark:border-amber-400/40"
+                    : "text-text-secondary hover:text-text-primary hover:bg-surface"
                 }`}
               >
                 <div className="text-[10px] uppercase font-bold tracking-wider">
@@ -264,27 +265,27 @@ export function SevenDayStudyRoutine({
             );
           })}
         </div>
-      </div>
+      </SlideInLeft>
 
-      {/* Selected Day Routine Card */}
-      <div className="p-6 sm:p-7 rounded-3xl bg-surface border border-divider/80 shadow-card space-y-6">
+      {/* Selected Day Routine Card - Slides in from Left */}
+      <SlideInLeft xOffset={-45} delay={0.08} duration={0.45} className="p-6 sm:p-7 rounded-3xl bg-surface border border-divider shadow-card space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-divider pb-5">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-accent-light text-accent">
+              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface-secondary border border-divider/60 text-accent dark:text-amber-300">
                 {activeRoutine.dayName} • Day {activeRoutine.dayNumber}
               </span>
               {activeRoutine.dayNumber === currentDayNum && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-success border border-success/20">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
                   Today&apos;s Focus
                 </span>
               )}
               {activeRoutine.isDsaDay && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200/50 flex items-center gap-1">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200/50 dark:border-indigo-800/50 flex items-center gap-1">
                   <Code2 className="w-3 h-3" /> DSA Day
                 </span>
               )}
-              <span className="text-xs font-semibold text-text-secondary bg-slate-100 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-semibold text-text-secondary bg-surface-secondary border border-divider/60 px-2 py-0.5 rounded-full">
                 {activeRoutine.duration} mins
               </span>
             </div>
@@ -301,7 +302,7 @@ export function SevenDayStudyRoutine({
             {activeRoutine.isDsaDay && onOpenDsaStudio && (
               <button
                 onClick={() => onOpenDsaStudio(activeRoutine.dsaProblemId)}
-                className="px-4 py-2 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200/60 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold border border-indigo-200/60 dark:border-indigo-700/50 transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
               >
                 <Code2 className="w-3.5 h-3.5" />
                 <span>Launch Code Editor</span>
@@ -310,7 +311,7 @@ export function SevenDayStudyRoutine({
 
             <button
               onClick={() => handleOpenEdit(activeRoutine)}
-              className="px-4 py-2 rounded-full border border-divider hover:bg-slate-50 text-xs font-semibold text-text-primary transition-all active:scale-95 flex items-center gap-1.5"
+              className="px-4 py-2 rounded-full border border-divider hover:bg-surface-secondary text-xs font-semibold text-text-primary transition-all active:scale-95 flex items-center gap-1.5"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit Directive</span>
@@ -318,7 +319,7 @@ export function SevenDayStudyRoutine({
 
             <button
               onClick={() => handleLaunchTodayStudy(activeRoutine)}
-              className="px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full bg-accent hover:bg-accent-hover text-cream dark:text-dark-bg text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Embark on Day {activeRoutine.dayNumber} Directive</span>
@@ -326,7 +327,7 @@ export function SevenDayStudyRoutine({
           </div>
         </div>
 
-        {/* Key Concepts / Syllabus for the Day */}
+        {/* Key Concepts / Syllabus for the Day - Staggers in from Left */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">
@@ -335,7 +336,7 @@ export function SevenDayStudyRoutine({
             {activeRoutine.isDsaDay && onOpenDsaStudio && (
               <button
                 onClick={() => onOpenDsaStudio(activeRoutine.dsaProblemId)}
-                className="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1"
+                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
               >
                 <span>Practice this in DSA Studio</span>
                 <ArrowRight className="w-3 h-3" />
@@ -343,11 +344,15 @@ export function SevenDayStudyRoutine({
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <ScrollStaggerContainer
+            staggerDelay={0.08}
+            className="grid grid-cols-1 md:grid-cols-3 gap-3"
+          >
             {activeRoutine.keyConcepts.map((concept, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="p-4 rounded-2xl bg-slate-50/70 border border-divider/70 flex flex-col justify-between gap-3"
+                variants={staggerItemLeft}
+                className="p-4 rounded-2xl bg-surface-secondary border border-divider flex flex-col justify-between gap-3 shadow-subtle"
               >
                 <div>
                   <div className="text-[10px] font-bold text-text-secondary uppercase">
@@ -357,16 +362,16 @@ export function SevenDayStudyRoutine({
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-divider/40 text-[11px] text-text-secondary">
-                  <span className="flex items-center gap-1 text-accent font-semibold">
-                    <Sparkles className="w-3 h-3" /> +1 Intellect
+                  <span className="flex items-center gap-1 text-accent dark:text-amber-300 font-semibold">
+                    <Sparkles className="w-3 h-3 text-amber-500" /> +1 Intellect
                   </span>
                   <span>Deep Work</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </ScrollStaggerContainer>
         </div>
-      </div>
+      </SlideInLeft>
 
       {/* Edit Directive Modal */}
       <AnimatePresence>

@@ -16,6 +16,7 @@ import {
 import { useToast } from "@/components/ui/Toast";
 import { apiRequest } from "@/lib/api";
 import { TaskItem } from "@/types";
+import { SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface ExercisePlan {
@@ -266,8 +267,8 @@ export function SevenDayGymRoutine({
 
   return (
     <div className="space-y-6">
-      {/* 7-Day Day Selector Bar */}
-      <div className="p-3 rounded-2xl bg-surface border border-divider shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* 7-Day Day Selector Bar - Slides in from Left */}
+      <SlideInLeft xOffset={-35} duration={0.4} className="p-3 rounded-2xl bg-surface border border-divider shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-orange-50 text-warm flex items-center justify-center font-bold">
             <Calendar className="w-5 h-5" />
@@ -283,7 +284,7 @@ export function SevenDayGymRoutine({
         </div>
 
         {/* 7 Days Button Row */}
-        <div className="grid grid-cols-7 gap-1.5 p-1 bg-slate-100/80 rounded-xl overflow-x-auto">
+        <div className="grid grid-cols-7 gap-1.5 p-1 bg-surface-secondary border border-divider/60 rounded-xl overflow-x-auto">
           {routines.map((r) => {
             const isToday = r.dayNumber === currentDayNum;
             const isSelected = r.dayNumber === selectedDay;
@@ -293,10 +294,10 @@ export function SevenDayGymRoutine({
                 onClick={() => setSelectedDay(r.dayNumber)}
                 className={`py-2 px-2.5 rounded-lg text-center transition-all ${
                   isSelected
-                    ? "bg-warm text-white font-bold shadow-sm scale-102"
+                    ? "bg-warm text-cream dark:text-dark-bg font-bold shadow-sm scale-102"
                     : isToday
-                    ? "bg-orange-100 text-warm font-bold border border-warm/30"
-                    : "text-text-secondary hover:text-text-primary hover:bg-white"
+                    ? "bg-amber-500/15 text-warm dark:text-amber-300 font-bold border border-warm/30 dark:border-amber-400/40"
+                    : "text-text-secondary hover:text-text-primary hover:bg-surface"
                 }`}
               >
                 <div className="text-[10px] uppercase font-bold tracking-wider">
@@ -310,22 +311,22 @@ export function SevenDayGymRoutine({
             );
           })}
         </div>
-      </div>
+      </SlideInLeft>
 
-      {/* Selected Day Routine Card */}
-      <div className="p-6 sm:p-7 rounded-3xl bg-surface border border-divider/80 shadow-card space-y-6">
+      {/* Selected Day Routine Card - Slides in from Left */}
+      <SlideInLeft xOffset={-45} delay={0.08} duration={0.45} className="p-6 sm:p-7 rounded-3xl bg-surface border border-divider shadow-card space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-divider pb-5">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-warm-light text-warm">
+              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface-secondary border border-divider/60 text-warm dark:text-amber-300">
                 {activeRoutine.dayName} • Day {activeRoutine.dayNumber}
               </span>
               {activeRoutine.dayNumber === currentDayNum && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-success border border-success/20">
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
                   Today&apos;s Battle
                 </span>
               )}
-              <span className="text-xs font-semibold text-text-secondary bg-slate-100 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-semibold text-text-secondary bg-surface-secondary border border-divider/60 px-2 py-0.5 rounded-full">
                 {activeRoutine.duration} mins
               </span>
             </div>
@@ -340,7 +341,7 @@ export function SevenDayGymRoutine({
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => handleOpenEdit(activeRoutine)}
-              className="px-4 py-2 rounded-full border border-divider hover:bg-slate-50 text-xs font-semibold text-text-primary transition-all active:scale-95 flex items-center gap-1.5"
+              className="px-4 py-2 rounded-full border border-divider hover:bg-surface-secondary text-xs font-semibold text-text-primary transition-all active:scale-95 flex items-center gap-1.5"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit Routine</span>
@@ -348,7 +349,7 @@ export function SevenDayGymRoutine({
 
             <button
               onClick={() => handleLaunchTodayWorkout(activeRoutine)}
-              className="px-5 py-2.5 rounded-full bg-warm hover:bg-warm/90 text-white text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
+              className="px-5 py-2.5 rounded-full bg-warm hover:bg-warm/90 text-cream dark:text-dark-bg text-xs font-bold shadow-sm transition-all active:scale-95 flex items-center gap-2"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>Embark on Day {activeRoutine.dayNumber} Quest</span>
@@ -356,17 +357,21 @@ export function SevenDayGymRoutine({
           </div>
         </div>
 
-        {/* Exercises Table / Cards */}
+        {/* Exercises Table / Cards - Staggers in from Left */}
         <div>
           <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider mb-3">
             Assigned Exercise Protocol ({activeRoutine.exercises.length} Drills)
           </h4>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <ScrollStaggerContainer
+            staggerDelay={0.08}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+          >
             {activeRoutine.exercises.map((ex, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="p-4 rounded-2xl bg-slate-50/70 border border-divider/70 flex items-start justify-between gap-2"
+                variants={staggerItemLeft}
+                className="p-4 rounded-2xl bg-surface-secondary border border-divider flex items-start justify-between gap-2 shadow-subtle"
               >
                 <div>
                   <div className="text-[10px] font-bold text-text-secondary uppercase">
@@ -383,11 +388,11 @@ export function SevenDayGymRoutine({
                     {ex.sets} × {ex.reps}
                   </span>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </ScrollStaggerContainer>
         </div>
-      </div>
+      </SlideInLeft>
 
       {/* Edit Routine Modal */}
       <AnimatePresence>

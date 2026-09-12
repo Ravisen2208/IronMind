@@ -57,14 +57,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isFirebaseConfigured()) {
-      // Check if previously logged in as demo
-      const savedDemoUid = localStorage.getItem("ironmind_demo_uid");
-      if (savedDemoUid) {
-        setIsDemoMode(true);
-        fetchProfile().finally(() => setLoading(false));
-      } else {
-        setLoading(false);
+      let savedDemoUid = localStorage.getItem("ironmind_demo_uid");
+      if (!savedDemoUid) {
+        savedDemoUid = "warrior_hero";
+        try {
+          localStorage.setItem("ironmind_demo_uid", savedDemoUid);
+        } catch {}
       }
+      setIsDemoMode(true);
+      fetchProfile().finally(() => setLoading(false));
       return;
     }
 

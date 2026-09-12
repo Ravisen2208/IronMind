@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import {
   Shield,
   Sparkles,
@@ -46,14 +47,14 @@ export function Navbar() {
           href={isLoggedIn ? "/dashboard" : "/"}
           className="flex items-center gap-2.5 group transition-transform active:scale-95 shrink-0"
         >
-          <div className="w-9 h-9 rounded-2xl bg-accent flex items-center justify-center text-cream shadow-sm group-hover:bg-accent-hover transition-colors">
-            <Shield className="w-5 h-5 fill-cream/20" />
+          <div className="w-9 h-9 rounded-2xl bg-accent flex items-center justify-center text-cream dark:text-dark-bg shadow-sm group-hover:bg-accent-hover transition-colors">
+            <Shield className="w-5 h-5 fill-current opacity-20" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base sm:text-lg font-serif tracking-tight text-text-primary leading-tight">
+            <span className="text-base sm:text-lg font-heading font-extrabold tracking-tight text-text-primary leading-tight">
               IronMind
             </span>
-            <span className="text-[10px] uppercase font-bold tracking-[0.15em] text-bronze leading-none font-sans">
+            <span className="text-[10px] uppercase font-bold tracking-[0.18em] text-bronze leading-none font-sans">
               Progression
             </span>
           </div>
@@ -72,7 +73,7 @@ export function Navbar() {
                       className={`text-xs font-semibold px-3.5 py-2 rounded-full transition-all flex items-center gap-1.5 ${
                         isActive
                           ? "bg-accent/10 text-accent font-bold"
-                          : "text-text-secondary hover:text-text-primary hover:bg-warm/30"
+                          : "text-text-secondary hover:text-text-primary hover:bg-surface-secondary"
                       }`}
                     >
                       <item.icon className="w-3.5 h-3.5" />
@@ -86,11 +87,14 @@ export function Navbar() {
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          {/* Theme Switcher Toggle */}
+          <ThemeToggle />
+
           {isLoggedIn ? (
             <>
               {userStats && (
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-divider shadow-subtle text-xs font-semibold text-text-primary">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-divider shadow-subtle text-xs font-semibold text-text-primary">
                   <Sparkles className="w-3.5 h-3.5 text-bronze" />
                   <span>Lv.{userStats.level}</span>
                 </div>
@@ -118,7 +122,7 @@ export function Navbar() {
               <MagneticButton strength={0.3} dataCursorText="Start">
                 <Link
                   href="/signup"
-                  className="text-xs font-semibold bg-accent text-cream px-5 py-2.5 rounded-full hover:bg-accent-hover shadow-sm tracking-wide uppercase transition-all active:scale-95"
+                  className="text-xs font-semibold bg-accent text-cream dark:text-dark-bg px-5 py-2.5 rounded-full hover:bg-accent-hover shadow-sm tracking-wide uppercase transition-all active:scale-95"
                 >
                   Start Building
                 </Link>

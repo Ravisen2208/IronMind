@@ -11,11 +11,11 @@ import { CoinBalance } from "@/components/dashboard/CoinBalance";
 import { QuestForm } from "@/components/quests/QuestForm";
 import { QuestCard } from "@/components/quests/QuestCard";
 import { LevelUpModal } from "@/components/animations/LevelUpModal";
-import { DashboardSkeleton } from "@/components/ui/LoadingSkeleton";
+import { DashboardSkeleton, Skeleton } from "@/components/ui/LoadingSkeleton";
 import { useToast } from "@/components/ui/Toast";
 import { apiRequest } from "@/lib/api";
 import { TaskItem, CompletionResponse } from "@/types";
-import { FadeIn, StaggerContainer, staggerItem } from "@/components/animations/MotionWrapper";
+import { FadeIn, SlideInLeft, ScrollStaggerContainer, staggerItemLeft } from "@/components/animations/MotionWrapper";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Target,
@@ -105,7 +105,7 @@ export default function DashboardPage() {
       {/* Top Header */}
       <FadeIn yOffset={10} duration={0.5} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif tracking-tight text-text-primary">
+          <h1 className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tight text-text-primary">
             Overview & Progression
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-0.5">
@@ -148,12 +148,12 @@ export default function DashboardPage() {
         )}
       </AnimatePresence>
 
-      {/* Attributes & Stats 4-Column Grid */}
-      <StaggerContainer
+      {/* Attributes & Stats 4-Column Grid - Staggers smoothly from Left */}
+      <ScrollStaggerContainer
         staggerDelay={0.08}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        <motion.div variants={staggerItem}>
+        <motion.div variants={staggerItemLeft}>
           <StatCard
             type="intellect"
             value={userStats.attributes.intellect}
@@ -161,7 +161,7 @@ export default function DashboardPage() {
           />
         </motion.div>
 
-        <motion.div variants={staggerItem}>
+        <motion.div variants={staggerItemLeft}>
           <StatCard
             type="willpower"
             value={userStats.attributes.willpower}
@@ -169,20 +169,20 @@ export default function DashboardPage() {
           />
         </motion.div>
 
-        <motion.div variants={staggerItem}>
+        <motion.div variants={staggerItemLeft}>
           <StreakCard
             streak={userStats.streak}
             lastCompletedDate={userStats.lastCompletedDate}
           />
         </motion.div>
 
-        <motion.div variants={staggerItem}>
+        <motion.div variants={staggerItemLeft}>
           <CoinBalance coins={userStats.coins} />
         </motion.div>
-      </StaggerContainer>
+      </ScrollStaggerContainer>
 
-      {/* Today's Progress Banner */}
-      <div className="p-6 rounded-3xl bg-surface border border-divider/70 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Today's Progress Banner - Slides in from Left */}
+      <SlideInLeft xOffset={-40} duration={0.45} className="p-6 rounded-3xl bg-surface border border-divider/70 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
           <div className="w-12 h-12 rounded-2xl bg-success-light text-success flex items-center justify-center">
             <CheckCircle2 className="w-6 h-6" />
@@ -221,10 +221,10 @@ export default function DashboardPage() {
             <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
-      </div>
+      </SlideInLeft>
 
-      {/* Priority Active Quests Preview */}
-      <div className="space-y-4">
+      {/* Priority Active Quests Preview - Slides in from Left */}
+      <SlideInLeft xOffset={-35} duration={0.45} className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Target className="w-4 h-4 text-accent" />
@@ -244,8 +244,8 @@ export default function DashboardPage() {
 
         {tasksLoading ? (
           <div className="space-y-3">
-            <div className="h-20 rounded-3xl bg-slate-200 animate-pulse" />
-            <div className="h-20 rounded-3xl bg-slate-200 animate-pulse" />
+            <Skeleton className="h-24 rounded-3xl" />
+            <Skeleton className="h-24 rounded-3xl" />
           </div>
         ) : activeTasks.length === 0 ? (
           <div className="p-8 rounded-3xl bg-surface border border-divider/60 text-center text-sm text-text-secondary">
@@ -263,7 +263,7 @@ export default function DashboardPage() {
             ))}
           </div>
         )}
-      </div>
+      </SlideInLeft>
 
       {/* Level Up Celebration Modal */}
       <LevelUpModal
