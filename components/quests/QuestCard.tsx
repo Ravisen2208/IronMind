@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { TaskItem, CompletionResponse } from "@/types";
+import { apiRequest } from "@/lib/api";
 import Link from "next/link";
 import {
   Check,
@@ -38,25 +39,25 @@ export function QuestCard({
   const [isCompleting, setIsCompleting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleComplete = async () => {
-    if (task.completed || isCompleting || !onComplete) return;
+  const handleComplete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (task.completed || isCompleting || isProcessing || !onComplete) return;
 
     setIsCompleting(true);
     try {
-      const res = await fetch("/api/tasks/complete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(typeof window !== "undefined" && localStorage.getItem("ironmind_demo_uid")
-            ? { "x-ironmind-demo-uid": localStorage.getItem("ironmind_demo_uid")! }
-            : {}),
-        },
-        body: JSON.stringify({ taskId: task.id }),
-      });
+      const res = await apiRequest<{ success: boolean; data: CompletionResponse }>(
+        "/api/tasks/complete",
+        {
+          method: "POST",
+          body: JSON.stringify({ taskId: task.id }),
+        }
+      );
 
-      const data = await res.json();
-      if (res.ok && data.success) {
-        onComplete(task.id, data.data);
+      if (res.success && res.data?.data) {
+        onComplete(task.id, res.data.data);
+      } else if (res.error) {
+        console.error("Task completion error:", res.error);
       }
     } catch (err) {
       console.error("Task completion failed:", err);
@@ -65,20 +66,17 @@ export function QuestCard({
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (isDeleting || !onDelete) return;
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/tasks/${task.id}`, {
+      const res = await apiRequest(`/api/tasks/${task.id}`, {
         method: "DELETE",
-        headers: {
-          ...(typeof window !== "undefined" && localStorage.getItem("ironmind_demo_uid")
-            ? { "x-ironmind-demo-uid": localStorage.getItem("ironmind_demo_uid")! }
-            : {}),
-        },
       });
 
-      if (res.ok) {
+      if (res.success) {
         onDelete(task.id);
       }
     } catch (err) {

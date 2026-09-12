@@ -358,6 +358,9 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
   >(null);
   const [isRunning, setIsRunning] = useState(false);
   const [activeTab, setActiveTab] = useState<"problem" | "tests">("problem");
+  const [solutionViewed, setSolutionViewed] = useState(false);
+  const [showSolutionConfirm, setShowSolutionConfirm] = useState(false);
+  const [solutionRevealed, setSolutionRevealed] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -366,6 +369,9 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
     setCode(selectedProblem.starterCode[language]);
     setTestResults(null);
     setConsoleOutput([]);
+    setSolutionViewed(false);
+    setSolutionRevealed(false);
+    setShowSolutionConfirm(false);
   }, [selectedProblem, language]);
 
   // Handle Tab key inside code editor
@@ -381,6 +387,13 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
         target.selectionStart = target.selectionEnd = start + 2;
       }, 0);
     }
+  };
+
+  const handleRevealSolution = () => {
+    setSolutionViewed(true);
+    setSolutionRevealed(true);
+    setShowSolutionConfirm(false);
+    showToast("⚠️ Solution viewed — rewards reduced by 50%", "warning");
   };
 
   const runCodeSandbox = () => {
@@ -459,19 +472,28 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
   };
 
   const handleAllTestsPassed = async () => {
-    showToast(`🎉 All Test Cases Passed! +50 XP, +20 Coins, +1 Intellect`, "success");
+    const penalty = solutionViewed ? 0.5 : 1;
+    const xp = Math.round(50 * penalty);
+    const coins = Math.round(20 * penalty);
+    const penaltyLabel = solutionViewed ? " (50% penalty — solution viewed)" : "";
+
+    showToast(
+      `🎉 All Test Cases Passed! +${xp} XP, +${coins} Coins, +1 Intellect${penaltyLabel}`,
+      "success"
+    );
 
     // Automatically log this as a completed DSA quest in IronMind backend
     try {
-      const title = `DSA Solved: ${selectedProblem.title}`;
+      const title = `DSA Solved: ${selectedProblem.title}${solutionViewed ? " (with hint)" : ""}`;
+      const priority = solutionViewed ? "low" : "high"; // lower priority = lower server rewards
       const res = await apiRequest<{ success: boolean; task: TaskItem }>("/api/tasks", {
         method: "POST",
         body: JSON.stringify({
           title,
-          description: `Mastered ${selectedProblem.title} (${selectedProblem.category}) with algorithmic precision.`,
+          description: `Mastered ${selectedProblem.title} (${selectedProblem.category}) with algorithmic precision.${solutionViewed ? " Used solution reference." : ""}`,
           type: "study",
           category: "Study",
-          priority: "high",
+          priority,
           study: {
             subject: "Data Structures & Algorithms",
             topic: selectedProblem.title,
