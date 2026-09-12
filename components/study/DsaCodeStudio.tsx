@@ -729,7 +729,7 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                           onClick={() => setShowSolutionConfirm(false)}
                           className="px-3 py-1.5 rounded-xl bg-white border border-divider text-text-secondary text-[11px] font-bold hover:bg-slate-50 transition-all active:scale-95"
                         >
-                          Cancel — I'll Try Myself
+                          Cancel — I&apos;ll Try Myself
                         </button>
                       </div>
                     </div>
