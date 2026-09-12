@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, UserStats, DEFAULT_WARRIOR_STATS } from "@/context/AuthContext";
 import { CharacterCard } from "@/components/character/CharacterCard";
 import { StatCard } from "@/components/character/StatCard";
 import { StreakCard } from "@/components/dashboard/StreakCard";
@@ -32,8 +32,16 @@ export default function DashboardPage() {
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [tasks, setTasks] = useState<TaskItem[]>([]);
-  const [tasksLoading, setTasksLoading] = useState(true);
+  const [tasks, setTasks] = useState<TaskItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("ironmind_cached_tasks");
+        if (cached) return JSON.parse(cached);
+      } catch {}
+    }
+    return [];
+  });
+  const [tasksLoading, setTasksLoading] = useState(false);
   const [isQuickCreateOpen, setIsQuickCreateOpen] = useState(false);
   const [levelUpState, setLevelUpState] = useState<{ isOpen: boolean; newLevel: number }>({
     isOpen: false,
@@ -48,12 +56,19 @@ export default function DashboardPage() {
   }, [user, isDemoMode, loading, router]);
 
   const fetchTasks = useCallback(async () => {
-    setTasksLoading(true);
-    const res = await apiRequest<{ success: boolean; tasks: TaskItem[] }>("/api/tasks");
-    if (res.success && res.data?.tasks) {
-      setTasks(res.data.tasks);
+    try {
+      const res = await apiRequest<{ success: boolean; tasks: TaskItem[] }>("/api/tasks");
+      if (res.success && res.data?.tasks) {
+        setTasks(res.data.tasks);
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem("ironmind_cached_tasks", JSON.stringify(res.data.tasks));
+          } catch {}
+        }
+      }
+    } finally {
+      setTasksLoading(false);
     }
-    setTasksLoading(false);
   }, []);
 
   useEffect(() => {
@@ -63,12 +78,28 @@ export default function DashboardPage() {
   }, [user, isDemoMode, fetchTasks]);
 
   const handleQuestCreated = (newTask: TaskItem) => {
-    setTasks((prev) => [newTask, ...prev]);
+    setTasks((prev) => {
+      const updated = [newTask, ...prev];
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("ironmind_cached_tasks", JSON.stringify(updated));
+        } catch {}
+      }
+      return updated;
+    });
     setIsQuickCreateOpen(false);
   };
 
   const handleCompleteQuest = (taskId: string, result: CompletionResponse) => {
-    setTasks((prev) => prev.map((t) => (t.id === taskId ? result.task : t)));
+    setTasks((prev) => {
+      const updated = prev.map((t) => (t.id === taskId ? result.task : t));
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("ironmind_cached_tasks", JSON.stringify(updated));
+        } catch {}
+      }
+      return updated;
+    });
     updateLocalStats(result.updatedProfile);
     showToast(
       `Quest Completed! +${result.progression.xpGained} XP, +${result.coinsEarned} Coins.`,
@@ -86,13 +117,20 @@ export default function DashboardPage() {
   };
 
   const handleDeleteQuest = (taskId: string) => {
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+    setTasks((prev) => {
+      const updated = prev.filter((t) => t.id !== taskId);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("ironmind_cached_tasks", JSON.stringify(updated));
+        } catch {}
+      }
+      return updated;
+    });
     showToast("Quest removed from log.", "info");
   };
 
-  if (loading || !userStats) {
-    return <DashboardSkeleton />;
-  }
+  const activeStats: UserStats = userStats || DEFAULT_WARRIOR_STATS;
+
 
   const activeTasks = tasks.filter((t) => !t.completed);
   const completedTasks = tasks.filter((t) => t.completed);
@@ -132,7 +170,7 @@ export default function DashboardPage() {
       </FadeIn>
 
       {/* Main Character Hero Card */}
-      <CharacterCard stats={userStats} isLeveledUp={isHighlightLevel} />
+      <CharacterCard stats={activeStats} isLeveledUp={isHighlightLevel} />
 
       {/* Quick Quest Form Drawer */}
       <AnimatePresence>
@@ -156,7 +194,7 @@ export default function DashboardPage() {
         <motion.div variants={staggerItemLeft}>
           <StatCard
             type="intellect"
-            value={userStats.attributes.intellect}
+            value={activeStats.attributes.intellect}
             description="Expands cognitive horsepower, deep work, and learning retention."
           />
         </motion.div>
@@ -164,22 +202,23 @@ export default function DashboardPage() {
         <motion.div variants={staggerItemLeft}>
           <StatCard
             type="willpower"
-            value={userStats.attributes.willpower}
+            value={activeStats.attributes.willpower}
             description="Fortifies resistance to impulse, workout consistency, and grit."
           />
         </motion.div>
 
         <motion.div variants={staggerItemLeft}>
           <StreakCard
-            streak={userStats.streak}
-            lastCompletedDate={userStats.lastCompletedDate}
+            streak={activeStats.streak}
+            lastCompletedDate={activeStats.lastCompletedDate}
           />
         </motion.div>
 
         <motion.div variants={staggerItemLeft}>
-          <CoinBalance coins={userStats.coins} />
+          <CoinBalance coins={activeStats.coins} />
         </motion.div>
       </ScrollStaggerContainer>
+
 
       {/* Today's Progress Banner - Slides in from Left */}
       <SlideInLeft xOffset={-40} duration={0.45} className="p-6 rounded-3xl bg-surface border border-divider/70 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">

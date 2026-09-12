@@ -42,21 +42,64 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+export const DEFAULT_WARRIOR_STATS: UserStats = {
+  uid: "warrior_hero",
+  email: null,
+  level: 1,
+  xp: 0,
+  coins: 50,
+  streak: 1,
+  longestStreak: 1,
+  lastCompletedDate: null,
+  attributes: {
+    intellect: 10,
+    willpower: 10,
+  },
+  createdAt: new Date().toISOString(),
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [userStats, setUserStats] = useState<UserStats>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("ironmind_user_stats");
+        if (cached) return JSON.parse(cached);
+      } catch {}
+    }
+    return DEFAULT_WARRIOR_STATS;
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
 
+  const updateLocalStats = (stats: UserStats) => {
+    setUserStats(stats);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ironmind_user_stats", JSON.stringify(stats));
+      } catch {}
+    }
+  };
+
   const fetchProfile = async () => {
-    const res = await apiRequest<{ success: boolean; profile: UserStats }>("/api/user/me");
-    if (res.success && res.data?.profile) {
-      setUserStats(res.data.profile);
+    try {
+      const res = await apiRequest<{ success: boolean; profile: UserStats }>("/api/user/me");
+      if (res.success && res.data?.profile) {
+        updateLocalStats(res.data.profile);
+      }
+    } catch (err) {
+      console.warn("Background profile sync deferred:", err);
     }
   };
 
   useEffect(() => {
+    // Safety timer: unblock loading after max 800ms so dashboard NEVER hangs
+    const safetyTimer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+
     if (!isFirebaseConfigured()) {
+      clearTimeout(safetyTimer);
       let savedDemoUid = localStorage.getItem("ironmind_demo_uid");
       if (!savedDemoUid) {
         savedDemoUid = "warrior_hero";
@@ -65,22 +108,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch {}
       }
       setIsDemoMode(true);
-      fetchProfile().finally(() => setLoading(false));
+      setLoading(false);
+      fetchProfile();
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      clearTimeout(safetyTimer);
       setUser(firebaseUser);
+      setLoading(false); // Unblock UI immediately!
       if (firebaseUser) {
-        await fetchProfile();
-      } else {
-        setUserStats(null);
+        fetchProfile(); // Sync in background
       }
-      setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      clearTimeout(safetyTimer);
+      unsubscribe();
+    };
   }, []);
+
 
   const login = async (email: string, pass: string) => {
     setLoading(true);
@@ -164,9 +211,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await signOut(auth);
       }
       localStorage.removeItem("ironmind_demo_uid");
+      localStorage.removeItem("ironmind_user_stats");
+      localStorage.removeItem("ironmind_cached_tasks");
       setUser(null);
-      setUserStats(null);
+      setUserStats(DEFAULT_WARRIOR_STATS);
       setIsDemoMode(false);
+
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
@@ -174,11 +224,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const updateLocalStats = (stats: UserStats) => {
-    setUserStats(stats);
-  };
-
   return (
+
     <AuthContext.Provider
       value={{
         user,
