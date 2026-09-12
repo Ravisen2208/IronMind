@@ -1,19 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { FloatingStats } from "../animations/FloatingStats";
 import { LoginForm } from "../auth/LoginForm";
-import { appleEasing, FadeIn, StaggerContainer, staggerItem } from "../animations/MotionWrapper";
+import { FadeIn, StaggerContainer, staggerItem } from "../animations/MotionWrapper";
 import { Shield, Sparkles, CheckCircle2, Zap, ArrowRight } from "lucide-react";
+import { MagneticButton } from "../ui/MagneticButton";
+import { HoverCardEffect } from "../ui/HoverCardEffect";
+import { InfiniteMarquee } from "../ui/InfiniteMarquee";
 
 export function HeroSection() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
   return (
     <div className="relative pt-6 pb-20 sm:pt-12 sm:pb-28 overflow-hidden">
+      {/* Infinite Horizontal Marquee Banner */}
+      <div className="mb-10">
+        <InfiniteMarquee />
+      </div>
+
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Top Tagline Badge */}
         <FadeIn delay={0.1} yOffset={10} className="flex justify-center mb-6">
@@ -46,42 +52,47 @@ export function HeroSection() {
             </p>
           </FadeIn>
 
-          {/* Call to Actions */}
-          <FadeIn delay={0.5} yOffset={15} className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/signup"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-md transition-all duration-200 active:scale-95"
-            >
-              <span>Begin Your Progression</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+          {/* Magnetic Call to Actions */}
+          <FadeIn delay={0.5} yOffset={15} className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <MagneticButton dataCursorText="Start">
+              <Link
+                href="/signup"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-accent hover:bg-accent-hover text-cream text-sm font-semibold uppercase tracking-wide shadow-md transition-all duration-200 active:scale-95"
+              >
+                <span>Begin Your Progression</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </MagneticButton>
 
-            <button
-              onClick={() => {
-                const el = document.getElementById("auth-experience");
-                el?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-surface hover:bg-warm-light text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95"
-            >
-              <span>Sign In to Character</span>
-            </button>
+            <MagneticButton dataCursorText="Login">
+              <button
+                onClick={() => {
+                  const el = document.getElementById("auth-experience");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-surface hover:bg-warm-light text-text-primary border border-divider/80 text-sm font-semibold shadow-subtle transition-all duration-200 active:scale-95"
+              >
+                <span>Sign In to Character</span>
+              </button>
+            </MagneticButton>
           </FadeIn>
         </div>
 
-        {/* Hero Image */}
+        {/* Hero Image with 3D Tilt Spotlight */}
         <FadeIn delay={0.6} yOffset={30} className="mt-12 sm:mt-16">
-          <div className="relative max-w-4xl mx-auto rounded-4xl overflow-hidden shadow-warm border border-divider/50">
-            <Image
-              src="/images/hero-ironmind.jpg"
-              alt="IronMind — Premium productivity meets RPG progression"
-              width={1400}
-              height={788}
-              priority
-              className="w-full h-auto object-cover"
-            />
-            {/* Warm gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent" />
-          </div>
+          <HoverCardEffect className="max-w-4xl mx-auto rounded-4xl shadow-warm border border-divider/50">
+            <div className="relative overflow-hidden rounded-4xl group">
+              <Image
+                src="/images/hero-ironmind.jpg"
+                alt="IronMind — Premium productivity meets RPG progression"
+                width={1400}
+                height={788}
+                priority
+                className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+            </div>
+          </HoverCardEffect>
         </FadeIn>
 
         {/* Coordinated Floating Graphic Area */}
@@ -89,67 +100,66 @@ export function HeroSection() {
           <FloatingStats />
         </div>
 
-        {/* Feature Cards with Generated Image */}
+        {/* Feature Cards with 3D Tilt Spotlight */}
         <FadeIn delay={0.3} yOffset={20} className="mt-8">
-          <div className="relative max-w-3xl mx-auto rounded-4xl overflow-hidden shadow-warm border border-divider/50">
-            <Image
-              src="/images/feature-cards.jpg"
-              alt="XP, Streaks, and Coins — IronMind progression system"
-              width={1400}
-              height={788}
-              className="w-full h-auto object-cover"
-            />
-          </div>
+          <HoverCardEffect className="max-w-3xl mx-auto rounded-4xl shadow-warm border border-divider/50">
+            <div className="relative overflow-hidden rounded-4xl group">
+              <Image
+                src="/images/feature-cards.jpg"
+                alt="XP, Streaks, and Coins — IronMind progression system"
+                width={1400}
+                height={788}
+                className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+            </div>
+          </HoverCardEffect>
         </FadeIn>
 
-        {/* Feature Stagger Highlights */}
+        {/* Feature Stagger Highlights with Hover Cards */}
         <StaggerContainer
           staggerDelay={0.12}
           className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto"
         >
-          <motion.div
-            variants={staggerItem}
-            className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center mb-3">
-              <Zap className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-serif text-text-primary tracking-tight">
-              Anti-Cheat Progression
-            </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
-              Every point of XP, streak, and coin reward is calculated and verified server-side via atomic transactions.
-            </p>
+          <motion.div variants={staggerItem}>
+            <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
+              <div className="w-10 h-10 rounded-2xl bg-accent-light text-accent flex items-center justify-center mb-3">
+                <Zap className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-serif text-text-primary tracking-tight">
+                Anti-Cheat Progression
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
+                Every point of XP, streak, and coin reward is calculated and verified server-side via atomic transactions.
+              </p>
+            </HoverCardEffect>
           </motion.div>
 
-          <motion.div
-            variants={staggerItem}
-            className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center mb-3">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-serif text-text-primary tracking-tight">
-              Premium Aesthetics
-            </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
-              Designed with warm minimalism: fluid cubic-bezier motion, subtle champagne accents, and zero distracting clutter.
-            </p>
+          <motion.div variants={staggerItem}>
+            <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
+              <div className="w-10 h-10 rounded-2xl bg-success-light text-success flex items-center justify-center mb-3">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-serif text-text-primary tracking-tight">
+                Premium Aesthetics
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
+                Designed with warm minimalism: fluid cubic-bezier motion, subtle champagne accents, and magnetic physics.
+              </p>
+            </HoverCardEffect>
           </motion.div>
 
-          <motion.div
-            variants={staggerItem}
-            className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-warning-light text-warning flex items-center justify-center mb-3">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-serif text-text-primary tracking-tight">
-              Gemini AI Directives
-            </h3>
-            <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
-              Generate actionable, concrete micro-quests with free-tier Gemini AI and resilient offline fallback.
-            </p>
+          <motion.div variants={staggerItem}>
+            <HoverCardEffect className="p-6 rounded-3xl bg-surface/80 backdrop-blur-md border border-divider/70 shadow-subtle h-full">
+              <div className="w-10 h-10 rounded-2xl bg-warning-light text-warning flex items-center justify-center mb-3">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-serif text-text-primary tracking-tight">
+                Gemini AI Directives
+              </h3>
+              <p className="text-xs sm:text-sm text-text-secondary mt-1 leading-relaxed font-sans">
+                Generate actionable, concrete micro-quests with free-tier Gemini AI and resilient offline fallback.
+              </p>
+            </HoverCardEffect>
           </motion.div>
         </StaggerContainer>
 

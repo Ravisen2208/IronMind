@@ -29,6 +29,8 @@ export const metadata: Metadata = {
   authors: [{ name: "IronMind Team" }],
 };
 
+import { CustomCursor } from "@/components/ui/CustomCursor";
+
 export default function RootLayout({
   children,
 }: {
@@ -39,6 +41,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased selection:bg-champagne/40 selection:text-text-primary">
         <AuthProvider>
           <ToastProvider>
+            <CustomCursor />
             <AnimatedBackground />
             <Navbar />
             <main className="flex-1 pb-20 md:pb-8">{children}</main>
