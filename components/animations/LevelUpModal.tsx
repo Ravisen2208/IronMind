@@ -48,14 +48,14 @@ export function LevelUpModal({ isOpen, newLevel, onClose }: LevelUpModalProps) {
             </button>
 
             {/* Glowing Icon Badge */}
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-accent to-accent-hover text-white flex items-center justify-center mx-auto mb-4 shadow-glow">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-accent to-accent-hover text-cream flex items-center justify-center mx-auto mb-4 shadow-glow">
               <Sparkles className="w-8 h-8" />
             </div>
 
             <div className="text-xs uppercase font-bold tracking-widest text-accent mb-1">
               Milestone Achieved
             </div>
-            <h2 className="text-2xl font-bold text-text-primary tracking-tight">
+            <h2 className="text-2xl font-serif text-text-primary tracking-tight">
               Level {newLevel} Unlocked
             </h2>
 
