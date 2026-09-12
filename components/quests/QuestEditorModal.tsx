@@ -175,7 +175,7 @@ export function QuestEditorModal({
               </div>
               <button
                 onClick={onClose}
-                className="p-1 rounded-full text-text-secondary hover:text-text-primary hover:bg-slate-100 transition-colors"
+                className="p-1 rounded-full text-text-secondary hover:text-text-primary hover:bg-warm-light transition-colors"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
@@ -193,7 +193,7 @@ export function QuestEditorModal({
                   maxLength={120}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-divider bg-slate-50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-sm focus:bg-white transition-all outline-none"
                 />
               </div>
 
@@ -327,7 +327,7 @@ export function QuestEditorModal({
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Notes, targets, or instructions..."
-                  className="w-full px-4 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-sm focus:bg-white transition-all outline-none resize-none"
+                  className="w-full px-4 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-sm focus:bg-white transition-all outline-none resize-none"
                 />
               </div>
 
@@ -339,7 +339,7 @@ export function QuestEditorModal({
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-divider bg-slate-50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+                    className="w-full px-3 py-2.5 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-sm focus:bg-white transition-all outline-none"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.name}>
@@ -356,7 +356,7 @@ export function QuestEditorModal({
                   <select
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as any)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-divider bg-slate-50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+                    className="w-full px-3 py-2.5 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-sm focus:bg-white transition-all outline-none"
                   >
                     <option value="low">Low (25 XP, 10 Coins)</option>
                     <option value="medium">Medium (40 XP, 18 Coins)</option>
@@ -373,7 +373,7 @@ export function QuestEditorModal({
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+                  className="w-full px-4 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-sm focus:bg-white transition-all outline-none"
                 />
               </div>
 
@@ -381,7 +381,7 @@ export function QuestEditorModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 py-2.5 rounded-full border border-divider text-xs font-semibold text-text-secondary hover:bg-slate-50 transition-all active:scale-95"
+                  className="flex-1 py-2.5 rounded-full border border-divider text-xs font-semibold text-text-secondary hover:bg-warm-light/40 transition-all active:scale-95"
                 >
                   Cancel
                 </button>

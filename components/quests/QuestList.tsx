@@ -39,7 +39,7 @@ export function QuestList({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-slate-100/80 border border-divider/60 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-warm-light/60 border border-divider/60 self-start sm:self-auto">
           <button
             onClick={() => setFilter("all")}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${

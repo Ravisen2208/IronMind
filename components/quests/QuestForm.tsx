@@ -144,7 +144,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g., Read 15 pages on system architecture or do 30 pushups..."
           maxLength={120}
-          className="flex-1 px-4 py-3 rounded-2xl border border-divider bg-slate-50 text-text-primary placeholder:text-text-muted text-sm focus:bg-white transition-all outline-none"
+          className="flex-1 px-4 py-3 rounded-2xl border border-divider bg-warm-light/40 text-text-primary placeholder:text-text-muted text-sm focus:bg-white transition-all outline-none"
         />
 
         <button
@@ -170,7 +170,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
           <select
             value={category}
             onChange={handleCategorySelectChange}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
           >
             {categories.map((c) => (
               <option key={c.id} value={c.name}>
@@ -188,7 +188,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value as TaskPriority)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
           >
             <option value="low">Low (25 XP, 10 Coins)</option>
             <option value="medium">Medium (40 XP, 18 Coins)</option>
@@ -218,7 +218,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Key milestones, checklist, or targets..."
-                className="w-full px-3 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs focus:bg-white transition-all outline-none resize-none"
+                className="w-full px-3 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs focus:bg-white transition-all outline-none resize-none"
               />
             </div>
 
@@ -230,7 +230,7 @@ export function QuestForm({ onQuestCreated, defaultType = "general" }: QuestForm
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full sm:w-64 px-3 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs focus:bg-white transition-all outline-none"
+                className="w-full sm:w-64 px-3 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs focus:bg-white transition-all outline-none"
               />
             </div>
           </div>

@@ -140,7 +140,7 @@ export default function MyQuestsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsCategoryModalOpen(true)}
-            className="text-xs font-semibold px-4 py-2.5 rounded-full border border-divider bg-surface hover:bg-slate-50 text-text-primary transition-all active:scale-95 shadow-subtle"
+            className="text-xs font-semibold px-4 py-2.5 rounded-full border border-divider bg-surface hover:bg-warm-light/40 text-text-primary transition-all active:scale-95 shadow-subtle"
           >
             + New Category
           </button>
@@ -178,7 +178,7 @@ export default function MyQuestsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search quests by title, tag, or notes..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs focus:bg-white transition-all outline-none"
             />
           </div>
 
@@ -187,7 +187,7 @@ export default function MyQuestsPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
+              className="px-3 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
             >
               <option value="all">All Categories</option>
               {categories.map((c) => (
@@ -201,7 +201,7 @@ export default function MyQuestsPage() {
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-divider bg-slate-50 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
+              className="px-3 py-2 rounded-xl border border-divider bg-warm-light/40 text-text-primary text-xs font-semibold focus:bg-white transition-all outline-none"
             >
               <option value="all">All Priorities</option>
               <option value="low">Low</option>
@@ -213,7 +213,7 @@ export default function MyQuestsPage() {
 
         {/* Segmented Tab Controls */}
         <div className="flex items-center justify-between pt-2 border-t border-divider/50">
-          <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100/90 border border-divider/60">
+          <div className="flex items-center gap-1 p-1 rounded-full bg-warm-light/70 border border-divider/60">
             <button
               onClick={() => setActiveTab("active")}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${

@@ -83,7 +83,7 @@ export function SignupForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="warrior@ironmind.app"
-              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-slate-50/50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-warm-light/30 text-text-primary text-sm focus:bg-white transition-all outline-none"
             />
           </div>
         </div>
@@ -100,7 +100,7 @@ export function SignupForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="At least 6 characters"
-              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-slate-50/50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-warm-light/30 text-text-primary text-sm focus:bg-white transition-all outline-none"
             />
           </div>
         </div>
@@ -117,7 +117,7 @@ export function SignupForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Repeat password"
-              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-slate-50/50 text-text-primary text-sm focus:bg-white transition-all outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-2xl border border-divider bg-warm-light/30 text-text-primary text-sm focus:bg-white transition-all outline-none"
             />
           </div>
         </div>
@@ -150,7 +150,7 @@ export function SignupForm() {
       <button
         type="button"
         onClick={handleDemoLogin}
-        className="w-full py-3 rounded-full bg-slate-100 hover:bg-slate-200/80 text-text-primary text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 border border-divider/60"
+        className="w-full py-3 rounded-full bg-warm-light hover:bg-slate-200/80 text-text-primary text-xs font-semibold transition-all active:scale-95 flex items-center justify-center gap-2 border border-divider/60"
       >
         <Sparkles className="w-3.5 h-3.5 text-accent" />
         <span>Try Instant Demo Mode</span>
