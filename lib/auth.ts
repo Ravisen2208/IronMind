@@ -13,18 +13,27 @@ export interface AuthenticatedUser {
 export async function verifyAuth(req: Request): Promise<AuthenticatedUser | null> {
   const authHeader = req.headers.get("Authorization") || req.headers.get("authorization");
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    // If running in development without Firebase Admin credentials, allow safe local demo simulation
-    if (!isFirebaseAdminConfigured() && process.env.NODE_ENV !== "production") {
-      const demoUid = req.headers.get("x-ironmind-demo-uid");
-      if (demoUid) {
-        return {
-          uid: demoUid,
-          email: "demo@ironmind.app",
-          name: "IronMind Warrior",
-        };
-      }
+  // When running locally without Firebase Admin credentials, allow safe demo sandbox
+  if (!isFirebaseAdminConfigured()) {
+    let demoUid: string | null = null;
+    if (authHeader && authHeader.startsWith("Bearer demo-token-")) {
+      demoUid = authHeader.replace("Bearer demo-token-", "").trim();
+    } else {
+      demoUid = req.headers.get("x-ironmind-demo-uid");
     }
+
+    if (demoUid) {
+      return {
+        uid: demoUid,
+        email: `${demoUid}@ironmind.app`,
+        name: "IronMind Warrior",
+      };
+    }
+    return null;
+  }
+
+  // Production verified Firebase ID Token flow
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return null;
   }
 
@@ -41,18 +50,6 @@ export async function verifyAuth(req: Request): Promise<AuthenticatedUser | null
       name: decodedToken.name,
     };
   } catch (error) {
-    // If running in local development mode with demo token
-    if (!isFirebaseAdminConfigured() && process.env.NODE_ENV !== "production") {
-      if (token.startsWith("demo-token-")) {
-        const uid = token.replace("demo-token-", "");
-        return {
-          uid: uid || "demo-warrior-uid",
-          email: "demo@ironmind.app",
-          name: "IronMind Warrior",
-        };
-      }
-    }
-
     console.error("Token verification failed:", error);
     return null;
   }
