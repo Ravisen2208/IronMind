@@ -586,6 +586,13 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{isRunning ? "Testing..." : "Run & Test Code"}</span>
           </button>
+
+          {solutionViewed && (
+            <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200/60 flex items-center gap-1">
+              <Flame className="w-3 h-3" />
+              -50% Rewards
+            </span>
+          )}
         </div>
       </div>
 
@@ -681,6 +688,69 @@ export function DsaCodeStudio({ defaultProblemId }: { defaultProblemId?: string 
                       <li key={i}>{c}</li>
                     ))}
                   </ul>
+                </div>
+
+                {/* Show Solution Section */}
+                <div className="pt-4 border-t border-divider/50">
+                  {!solutionRevealed && !showSolutionConfirm && (
+                    <button
+                      onClick={() => setShowSolutionConfirm(true)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl border-2 border-dashed border-amber-300/70 bg-amber-50/40 text-amber-700 text-xs font-bold hover:bg-amber-50 hover:border-amber-400 transition-all active:scale-[0.98]"
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>Show Solution</span>
+                      <span className="text-[10px] font-semibold text-amber-500 ml-1">(-50% Rewards)</span>
+                    </button>
+                  )}
+
+                  {/* Confirmation Dialog */}
+                  {showSolutionConfirm && !solutionRevealed && (
+                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-3">
+                      <div className="flex items-start gap-2">
+                        <Award className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-xs font-bold text-amber-800">
+                            Are you sure you want to see the solution?
+                          </p>
+                          <p className="text-[11px] text-amber-600 mt-1 leading-relaxed">
+                            Viewing the solution will reduce your XP and Coin rewards by <strong>50%</strong> when you complete this problem.
+                            Try solving it yourself first for maximum gains!
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleRevealSolution}
+                          className="px-3 py-1.5 rounded-xl bg-amber-600 text-white text-[11px] font-bold hover:bg-amber-700 transition-all active:scale-95"
+                        >
+                          Yes, Show Solution
+                        </button>
+                        <button
+                          onClick={() => setShowSolutionConfirm(false)}
+                          className="px-3 py-1.5 rounded-xl bg-white border border-divider text-text-secondary text-[11px] font-bold hover:bg-slate-50 transition-all active:scale-95"
+                        >
+                          Cancel — I'll Try Myself
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Revealed Solution */}
+                  {solutionRevealed && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-bold text-amber-700 uppercase tracking-wider text-[11px]">
+                          Solution ({language.toUpperCase()})
+                        </h4>
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200/60">
+                          PENALTY ACTIVE
+                        </span>
+                      </div>
+                      <pre className="p-3 rounded-2xl bg-[#1e222b] text-emerald-300 font-mono text-[11px] leading-relaxed overflow-x-auto border border-white/5">
+                        {selectedProblem.starterCode[language]}
+                      </pre>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
