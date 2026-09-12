@@ -2,179 +2,136 @@
 
 > **Train your mind. Complete your quests. Become stronger.**
 
-IronMind transforms real-life tasks and personal habits into an authoritative RPG progression system. By completing real-world quests, users earn XP, level up, build daily streaks, accumulate coins, and advance their Intellect and Willpower character attributes. 
+IronMind is an Apple-inspired gamified productivity platform that turns everyday goals, study sessions, workouts, work, habits, and personal goals into RPG-style quests.
 
-Designed with Apple-grade minimalism inspired by Apple Health and Apple Fitness, IronMind features fluid physics, refined typography, subtle glowing cues, and an anti-cheat server-side progression architecture.
-
----
-
-## Key Features
-
-- **Authoritative Anti-Cheat Progression**: XP, levels, daily streaks, coin rewards, and character attributes are calculated exclusively server-side via atomic transactions. Clients cannot manipulate stats.
-- **Dynamic Character System**:
-  - **Leveling**: Non-linear level progression calculated via `XP = round(100 * Level^1.5)`. Multi-level up detection supported.
-  - **Attributes**: Distinct quest categories feed into character stats:
-    - **Intellect** (`+1 INT` per quest): Focus, cognitive capacity, deep work.
-    - **Willpower** (`+1 WIL` per quest): Physical grit, discipline, impulse resistance.
-  - **Streak System**: Calendar-based streak calculation preventing duplicate daily increments while penalizing missed days.
-  - **Coin Treasury**: Warm accent coins awarded on every completion.
-- **Apple-Grade Aesthetic & Motion**:
-  - Custom Apple-style easing curves (`cubic-bezier(0.28, 0.11, 0.32, 1)`).
-  - Floating ambient light orbs, subtle grid backdrop, and interactive micro-stat cards.
-  - Subtle level-up modal with scale transitions and soft blue glow.
-  - Full `prefers-reduced-motion: reduce` compliance.
-- **Gemini AI Quest Directives**:
-  - Integrated with Google Gemini 1.5 Flash API for crisp, actionable quests under 12 words.
-  - Resilient offline fallback library ensuring 100% uptime even without an API key.
-- **Instant Guest Sandbox**:
-  - Try the full application immediately in local demo mode without needing to configure cloud credentials first.
+Designed with the minimalism, calm aesthetics, and fluid physics of Apple Health, Apple Fitness, and iOS/macOS system design, IronMind delivers an authoritative anti-cheat RPG engine with server-calculated rewards, permanent attribute progression, daily consistency defense, and Google Gemini AI directives.
 
 ---
 
-## Tech Stack
+## Complete Application Modules
 
-| Layer | Technology | Purpose |
+| Module | Route | Purpose |
 | :--- | :--- | :--- |
-| **Framework** | Next.js 14 (App Router) | Unified SSR, Client hydration & Server API routes |
-| **Language** | TypeScript 5 (Strict Mode) | End-to-end type safety |
-| **Styling** | Tailwind CSS 3 | Apple-inspired design tokens and layout |
-| **Animation** | Framer Motion 11 | Fluid animations with custom Apple cubic-bezier curves |
-| **Icons** | Lucide React | Clean, consistent line iconography |
-| **Auth** | Firebase Authentication | Secure Email/Password identity management |
-| **Database** | Firebase Firestore & Admin SDK | Authoritative transactional cloud store |
-| **AI** | Google Gemini 1.5 Flash | Concrete self-improvement quest generation |
+| **Landing** | `/` | Animated hero with floating micro-stat cards, smooth scroll reveals, and in-page guest sandbox |
+| **Login** | `/login` | Apple-style email/password authentication & instant guest sandbox entry |
+| **Signup** | `/signup` | Account creation with automatic character and starting stat initialization |
+| **Dashboard** | `/dashboard` | Unified Apple Fitness-style overview: Level, XP, Streaks, Coins, Attributes, Today's Completion, and quick actions |
+| **My Quests** | `/quests` | Full quest manager with active/completed tabs, real-time search, category filters, priority filters, quest editor modal, and custom category creator |
+| **Gym & Fitness** | `/gym` | Dedicated workout tracker: exercise picker, muscle groups, sets & reps counter, workout streak, and Willpower progression |
+| **Study & Focus** | `/study` | Deep focus manager: subjects, topics, study timer, study streak, and Intellect progression |
+| **Progress & Analytics** | `/progress` | 7-day Apple-style minimalist activity bar chart (Mon–Sun), study hours, workout sessions, and milestone streaks |
+| **Profile & Settings** | `/profile` | Apple Settings interface: account info, level progression breakdown, reduced motion toggle, and notifications toggle |
 
 ---
 
-## Architecture & Data Flow
+## Anti-Cheat RPG Progression Architecture
 
-```
-[ Browser / Client ]
-      │
-      ├─► Firebase Auth (Client SDK) ──► Issues Firebase ID Token
-      │
-      └─► Next.js 14 API Routes (Server) [Authorization: Bearer <ID-Token>]
-                │
-                ├─► lib/auth.ts (Verifies Token via Firebase Admin)
-                │
-                ├─► lib/progression.ts (Authoritative RPG Engine)
-                │         • XP = round(100 * N^1.5)
-                │         • Streak Date Logic (YYYY-MM-DD)
-                │         • Attribute Increments
-                │
-                ├─► lib/db.ts (Atomic Firestore Transaction)
-                │         • Enforces single-completion
-                │         • Prevents concurrent race conditions
-                │
-                └─► lib/ai.ts (Google Gemini 1.5 Flash API + Fallback)
-```
+1. **Strict Server Authority**:
+   - The browser client only transmits `{ "taskId": "..." }` when requesting quest completion.
+   - Clients cannot supply `xpReward`, `coinReward`, `level`, `streak`, or `attributes`.
+   - All state transitions execute atomically via Firestore transactions.
+   - Completed quests are permanently locked against reward modification or duplicate completion.
+
+2. **Leveling Formula**:
+   $$\text{XP Required for Level } N = \text{round}(100 \times N^{1.5})$$
+   Supports single and multi-level advancements seamlessly.
+
+3. **Attributes Progression**:
+   - **Intellect** (`+1 INT`): Enhanced by Study, Coding, and Reading quests.
+   - **Willpower** (`+1 WIL`): Enhanced by Gym, Health, and Mindfulness quests.
+
+4. **Consistency Streak System**:
+   - Compares server calendar dates (`YYYY-MM-DD`).
+   - Yesterday $\rightarrow$ `streak + 1`
+   - Today $\rightarrow$ `streak unchanged`
+   - Missed day $\rightarrow$ resets to `1`
+
+5. **Priority Reward Matrix**:
+   - **Low Priority**: 25 XP, 10 Coins
+   - **Medium Priority**: 40 XP, 18 Coins
+   - **High Priority**: 60 XP, 30 Coins
+   - **Gym & Study Sessions**: +10 XP, +5 Coins session focus bonus
 
 ---
 
-## Firestore Schema & Security Rules
+## Flexible Categories System
 
-### Data Schema
+IronMind includes 8 built-in Apple-styled default categories and supports user-created custom categories:
+- **Default**: Study, Gym, Work, Reading, Mindfulness, Health, Coding, Personal
+- **Custom Categories**: Users can create categories with custom names, line icons, and Apple accent colors directly from the quest creation or manager views.
 
-#### `users/{uid}`
-```json
-{
-  "uid": "string",
-  "email": "string | null",
-  "level": 1,
-  "xp": 0,
-  "coins": 50,
-  "streak": 0,
-  "lastCompletedDate": "YYYY-MM-DD | null",
-  "attributes": {
-    "intellect": 10,
-    "willpower": 10
-  },
-  "createdAt": "ISO-8601 string"
-}
-```
+---
 
-#### `users/{uid}/tasks/{taskId}`
-```json
-{
-  "id": "string",
-  "uid": "string",
-  "title": "string",
-  "category": "intellect | willpower",
-  "completed": false,
-  "xpReward": 35,
-  "coinReward": 15,
-  "createdAt": "ISO-8601 string",
-  "completedAt": "ISO-8601 string | null"
-}
-```
+## Apple Design System & Motion
 
-### Security Rules (`firestore.rules`)
-```cel
-rules_version = '2';
-
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false;
-
-      match /tasks/{taskId} {
-        allow read: if request.auth != null && request.auth.uid == userId;
-        allow write: if false;
-      }
-    }
-
-    match /{document=**} {
-      allow read, write: if false;
-    }
-  }
-}
-```
-*Direct client writes are forbidden across all collections. All state changes are executed by the verified Next.js server via Firebase Admin SDK transactions.*
+- **Color Tokens**:
+  - Background: `#F5F5F7`
+  - Primary Surface: `#FFFFFF`
+  - Secondary Surface: `#FBFBFD`
+  - Primary Text: `#1D1D1F`
+  - Secondary Text: `#6E6E73`
+  - Muted Text: `#86868B`
+  - Accent (Apple Blue): `#0071E3` (Hover: `#0058B0`)
+  - Success (Green): `#34C759`
+  - Warning (Gold Coins): `#FF9F0A`
+  - Danger (Red): `#FF3B30`
+  - Divider: `#D2D2D7`
+- **Curves & Physics**: Apple curve `cubic-bezier(0.28, 0.11, 0.32, 1)`.
+- **Card Surfaces**: 24px–32px border radius, soft 2px–20px shadow, subtle `translateY(-2px)` hover lift.
+- **Navigation**:
+  - Desktop: Translucent frosted glass sticky header (`glass-nav`).
+  - Mobile: Fixed iOS-style bottom tab bar (`MobileBottomNav`) for seamless one-handed mobile navigation.
+- **Accessibility**: ARIA progress bar semantics, keyboard focus rings, and full `prefers-reduced-motion: reduce` compliance.
 
 ---
 
 ## API Endpoints
 
-All protected endpoints expect the header `Authorization: Bearer <firebase-id-token>`.
+All protected endpoints require an `Authorization: Bearer <token>` header.
 
 - `POST /api/user/init`: Initializes user profile and default quests.
-- `GET /api/user/me`: Retrieves authoritative stats for the authenticated user.
-- `GET /api/tasks`: Fetches user active and completed quests.
-- `POST /api/tasks`: Creates a new quest. Server determines XP and Coin rewards based on category.
+- `GET /api/user/me`: Retrieves authoritative character stats.
+- `GET /api/tasks`: Lists quests with query filters (`?type=`, `?category=`, `?priority=`, `?completed=`, `?search=`).
+- `POST /api/tasks`: Creates a quest with authoritative reward assignment.
+- `PATCH /api/tasks/[id]`: Edits an incomplete quest's title, description, category, priority, or due date.
 - `DELETE /api/tasks/[id]`: Deletes a quest owned by the user.
-- `POST /api/tasks/complete`: **The only endpoint allowed to advance progression.** Takes `{ taskId }`, validates ownership in an atomic transaction, updates XP, Level, Streak, Coins, and Attributes, and commits atomically.
-- `POST /api/quest-ai`: Generates a short, concrete quest using Gemini AI with offline fallback.
+- `POST /api/tasks/complete`: Executes atomic anti-cheat progression.
+- `GET /api/categories`: Returns default and custom user categories.
+- `POST /api/categories`: Creates a new custom category.
+- `PATCH /api/categories/[id]`: Updates a custom category.
+- `DELETE /api/categories/[id]`: Deletes a custom category.
+- `POST /api/quest-ai`: Generates a concrete micro-quest under 12 words with Google Gemini 1.5 Flash (with resilient offline fallback).
 
 ---
 
 ## Local Development Setup
 
-### 1. Clone the repository
+### 1. Clone & Install
 ```bash
 git clone https://github.com/Ravisen2208/IronMind.git
 cd IronMind
-```
-
-### 2. Install dependencies
-```bash
 npm install
 ```
 
-### 3. Configure environment variables
+### 2. Environment Configuration
 Copy `.env.example` to `.env.local`:
 ```bash
 cp .env.example .env.local
 ```
-Fill in your Firebase client credentials, Firebase Admin private key, and Gemini API key (optional for local testing; demo fallback works out of the box).
+*(Optional for local testing: Instant Guest Sandbox and offline AI fallback work out of the box).*
 
-### 4. Run the development server
+### 3. Run Dev Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
-### 5. Build for production
+### 4. Run Automated Test Suite
+```bash
+node ./scripts/verify.mjs
+```
+
+### 5. Production Build
 ```bash
 npm run build
 npm run start
@@ -182,24 +139,14 @@ npm run start
 
 ---
 
-## Deployment (Vercel)
-
-1. Import the GitHub repository `Ravisen2208/IronMind` in Vercel.
-2. Under Project Settings -> Environment Variables, add the keys from `.env.example`.
-3. Deploy. Next.js App Router API routes deploy as serverless functions with zero additional server configuration.
-
----
-
 ## Third-Party Disclosure
 
-IronMind utilizes the following production libraries, APIs, and hosting providers:
-
-- **Core & Runtime**: Next.js 14, React 18, React-DOM 18, Node.js
-- **Styling & Design System**: Tailwind CSS 3, PostCSS, Autoprefixer
-- **Motion & Interactions**: Framer Motion 11
-- **Iconography**: Lucide React
-- **Class Merging**: `clsx`, `tailwind-merge`
-- **Identity & Authentication**: Firebase Authentication (`firebase/auth`)
-- **Cloud Database & Transactions**: Firebase Firestore (`firebase-admin/firestore`)
-- **Artificial Intelligence**: Google Generative AI SDK (`@google/generative-ai`, Gemini 1.5 Flash)
-- **Version Control & Hosting**: GitHub, Vercel
+- **Core Framework**: Next.js 14 (App Router), React 18, React-DOM 18
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 3, PostCSS, Autoprefixer
+- **Motion**: Framer Motion 11
+- **Icons**: Lucide React
+- **Identity & Authentication**: Firebase Authentication
+- **Cloud Database**: Firebase Firestore & Firebase Admin SDK
+- **AI Directives**: Google Generative AI (`@google/generative-ai`, Gemini 1.5 Flash)
+- **Hosting & CI**: Vercel, GitHub
