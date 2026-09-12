@@ -3,6 +3,8 @@ import { verifyAuth } from "@/lib/auth";
 import { createNewTask, getUserTasks } from "@/lib/db";
 import { validateTaskInput } from "@/lib/validation";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   try {
     const authUser = await verifyAuth(req);

@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/components/ui/Toast";
 import { Navbar } from "@/components/ui/Navbar";
 import { AnimatedBackground } from "@/components/animations/AnimatedBackground";
+
+export const viewport: Viewport = {
+  themeColor: "#FBFBFD",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: "IronMind — Train your mind. Complete your quests. Become stronger.",
@@ -19,8 +26,6 @@ export const metadata: Metadata = {
     "Focus",
   ],
   authors: [{ name: "IronMind Team" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-  themeColor: "#FBFBFD",
 };
 
 export default function RootLayout({

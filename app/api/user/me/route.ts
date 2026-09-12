@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
 import { getUserProfile, initializeUserProfile } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: Request) {
   try {
     const authUser = await verifyAuth(req);
