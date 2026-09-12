@@ -1,8 +1,8 @@
 // Complete Verification test suite for IronMind full-stack suite
 
 async function runTests() {
-  const baseUrl = "http://localhost:3000";
-  console.log("=== Testing IronMind Extended Suite ===");
+  const baseUrl = process.env.TEST_URL || "http://localhost:3000";
+  console.log("=== Testing IronMind Extended Suite on", baseUrl, "===");
 
   // 1. AI Quest Suggestions
   console.log("\n--- Testing /api/quest-ai ---");
