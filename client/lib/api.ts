@@ -49,12 +49,25 @@ export async function apiRequest<T = any>(
       headers,
     });
 
-    const data = await response.json();
+    let data: any = null;
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
+    } else {
+      const text = await response.text().catch(() => "");
+      data = {
+        error: text && text.length < 200 ? text : `Server temporarily unavailable (HTTP ${response.status})`,
+      };
+    }
 
     if (!response.ok) {
       return {
         success: false,
-        error: data.error || `Request failed with status ${response.status}`,
+        error: data?.error || data?.message || `Request failed with status ${response.status}`,
       };
     }
 

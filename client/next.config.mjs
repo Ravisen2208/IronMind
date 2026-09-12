@@ -8,17 +8,20 @@ const nextConfig = {
 
     apiUrl = apiUrl.trim();
 
-    // Ensure apiUrl always has a valid protocol prefix
-    if (
+    // Map internal Render service name to public HTTPS domain, or localhost for local dev
+    if (apiUrl.includes("localhost") || apiUrl.includes("127.0.0.1")) {
+      apiUrl = "http://localhost:5000";
+    } else if (apiUrl === "ironmind-server" || apiUrl === "http://ironmind-server:5000") {
+      apiUrl = "https://ironmind-server.onrender.com";
+    } else if (
       !apiUrl.startsWith("http://") &&
       !apiUrl.startsWith("https://") &&
       !apiUrl.startsWith("/")
     ) {
-      if (apiUrl.includes(".onrender.com") || apiUrl.includes(".")) {
+      if (apiUrl.includes(".onrender.com")) {
         apiUrl = `https://${apiUrl}`;
       } else {
-        // Internal service name or hostname
-        apiUrl = `http://${apiUrl}:5000`;
+        apiUrl = `https://${apiUrl}.onrender.com`;
       }
     }
 
@@ -34,4 +37,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
 
